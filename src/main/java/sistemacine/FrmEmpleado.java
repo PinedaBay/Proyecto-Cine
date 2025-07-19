@@ -16,11 +16,12 @@ public class FrmEmpleado extends javax.swing.JFrame {
     
     public FrmEmpleado() {
         initComponents();
-         limpiarCampos();
-         configurarPopupCombo();
-         cboEstado.removeAllItems();
-         cboEstado.setSelectedIndex(-1); 
-         btnGuardarEmpleado.setEnabled(true);
+        setLocationRelativeTo(null);
+        limpiarCampos();
+        configurarPopupCombo();
+        cboEstado.removeAllItems();
+        cboEstado.setSelectedIndex(-1); 
+        btnGuardarEmpleado.setEnabled(true);
 
         mostrarSiguienteIdEmpleado();
         cargarTablaEmpleados();

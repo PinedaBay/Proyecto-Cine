@@ -15,6 +15,7 @@ public final class FrmPeliculas extends javax.swing.JFrame {
     
     public FrmPeliculas() {
         initComponents();
+        setLocationRelativeTo(null);
         limpiar();
         
         modeloTabla = (DefaultTableModel) this.jTable1.getModel();

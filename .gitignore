@@ -1,0 +1,14 @@
+# Ignorar carpetas de compilación
+/build/
+/dist/
+
+# Configuración privada de NetBeans
+/nbproject/private/
+
+# Archivos de respaldo y temporales
+*.class
+*.jar
+*.log
+*.tmp
+.DS_Store
+Thumbs.db

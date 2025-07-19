@@ -12,7 +12,8 @@ public final class FrmVentaBoletos extends javax.swing.JFrame {
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmVentaBoletos.class.getName());
     
     public FrmVentaBoletos() {
-        initComponents();        
+        initComponents();
+        setLocationRelativeTo(null);        
         cargarTablaVentas();
         cargarPeliculas();    
         limpiarCampos();

@@ -15,6 +15,7 @@ public class FrmSalas extends javax.swing.JFrame {
     
     public FrmSalas() {
         initComponents();
+        setLocationRelativeTo(null);
         limpiarCampos();
         cargarTablaSalas();
         mostrarSiguienteIdSala();

@@ -15,6 +15,7 @@ public final class FrmFunciones extends javax.swing.JFrame {
 
     public FrmFunciones() {
          initComponents();
+         setLocationRelativeTo(null);
          limpiarCampos();
          cargarPeliculas();
          cargarSalas();
