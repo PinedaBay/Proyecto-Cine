@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8" ?>
 
-<Form version="1.3" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
+<Form version="1.5" maxVersion="1.9" type="org.netbeans.modules.form.forminfo.JFrameFormInfo">
   <Properties>
     <Property name="defaultCloseOperation" type="int" value="3"/>
   </Properties>
@@ -32,21 +32,21 @@
                   </Group>
                   <Group type="102" alignment="0" attributes="0">
                       <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                          <Component id="roles" alignment="0" max="32767" attributes="0"/>
-                          <Component id="Contrasenia" alignment="0" max="32767" attributes="0"/>
-                          <Component id="Usuario" alignment="0" max="32767" attributes="0"/>
-                          <Component id="Usuario1" alignment="0" min="-2" pref="93" max="-2" attributes="0"/>
+                          <Component id="lblRoles" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lblContrasenia" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lblUsuarios" alignment="0" max="32767" attributes="0"/>
+                          <Component id="lblEmpleados" alignment="0" min="-2" pref="93" max="-2" attributes="0"/>
+                          <Component id="lblIdRol" alignment="0" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace max="-2" attributes="0"/>
-                      <Group type="103" groupAlignment="0" attributes="0">
-                          <Group type="103" groupAlignment="0" max="-2" attributes="0">
-                              <Component id="txtUsuario" max="32767" attributes="0"/>
-                              <Component id="txtContrasenia" max="32767" attributes="0"/>
-                              <Component id="cboRoles" min="-2" pref="204" max="-2" attributes="0"/>
-                          </Group>
-                          <Component id="cboEmpleado" min="-2" pref="204" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="76" max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                          <Component id="txtUsuario" max="32767" attributes="0"/>
+                          <Component id="txtContrasenia" max="32767" attributes="0"/>
+                          <Component id="cboEmpleados" pref="204" max="32767" attributes="0"/>
+                          <Component id="txtIdRol" alignment="0" max="32767" attributes="0"/>
+                          <Component id="txtRoles" alignment="1" max="32767" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="58" max="-2" attributes="0"/>
+                      <EmptySpace pref="58" max="32767" attributes="0"/>
                       <Component id="jScrollPane1" min="-2" pref="401" max="-2" attributes="0"/>
                   </Group>
                   <Group type="102" alignment="1" attributes="0">
@@ -63,7 +63,7 @@
                       <EmptySpace min="-2" pref="86" max="-2" attributes="0"/>
                   </Group>
               </Group>
-              <EmptySpace pref="39" max="32767" attributes="0"/>
+              <EmptySpace max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -76,28 +76,33 @@
               <Group type="103" groupAlignment="0" attributes="0">
                   <Group type="102" attributes="0">
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="Usuario1" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cboEmpleado" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblEmpleados" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="cboEmpleados" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace min="-2" pref="16" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="Usuario" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblUsuarios" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtUsuario" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="Contrasenia" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblContrasenia" alignment="3" min="-2" max="-2" attributes="0"/>
                           <Component id="txtContrasenia" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
-                      <EmptySpace min="-2" pref="24" max="-2" attributes="0"/>
+                      <EmptySpace min="-2" pref="3" max="-2" attributes="0"/>
                       <Group type="103" groupAlignment="3" attributes="0">
-                          <Component id="roles" alignment="3" min="-2" max="-2" attributes="0"/>
-                          <Component id="cboRoles" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="lblIdRol" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtIdRol" alignment="3" min="-2" max="-2" attributes="0"/>
+                      </Group>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Group type="103" groupAlignment="3" attributes="0">
+                          <Component id="lblRoles" alignment="3" min="-2" max="-2" attributes="0"/>
+                          <Component id="txtRoles" alignment="3" min="-2" max="-2" attributes="0"/>
                       </Group>
                   </Group>
                   <Component id="jScrollPane1" alignment="1" min="-2" pref="146" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="52" max="32767" attributes="0"/>
+              <EmptySpace pref="50" max="32767" attributes="0"/>
               <Group type="103" groupAlignment="3" attributes="0">
                   <Component id="btnNuevo" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnGuardar" alignment="3" min="-2" max="-2" attributes="0"/>
@@ -105,7 +110,7 @@
                   <Component id="btnEliminar" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="btnCerrar" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="270" max="32767" attributes="0"/>
+              <EmptySpace pref="265" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -119,7 +124,7 @@
         <Property name="text" type="java.lang.String" value="GESTION DE USUARIOS"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="Usuario">
+    <Component class="javax.swing.JLabel" name="lblUsuarios">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
@@ -127,7 +132,7 @@
         <Property name="text" type="java.lang.String" value="USUARIO"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JLabel" name="Contrasenia">
+    <Component class="javax.swing.JLabel" name="lblContrasenia">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
@@ -193,28 +198,13 @@
         </Component>
       </SubComponents>
     </Container>
-    <Component class="javax.swing.JLabel" name="roles">
+    <Component class="javax.swing.JLabel" name="lblRoles">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
         </Property>
         <Property name="text" type="java.lang.String" value="ROLES"/>
       </Properties>
-    </Component>
-    <Component class="javax.swing.JComboBox" name="cboRoles">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
-      <AuxValues>
-        <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
-      </AuxValues>
     </Component>
     <Component class="javax.swing.JButton" name="btnNuevo">
       <Properties>
@@ -268,7 +258,7 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnCerrarActionPerformed"/>
       </Events>
     </Component>
-    <Component class="javax.swing.JLabel" name="Usuario1">
+    <Component class="javax.swing.JLabel" name="lblEmpleados">
       <Properties>
         <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
           <Font name="Tahoma" size="12" style="1"/>
@@ -276,20 +266,31 @@
         <Property name="text" type="java.lang.String" value="EMPLEADO"/>
       </Properties>
     </Component>
-    <Component class="javax.swing.JComboBox" name="cboEmpleado">
-      <Properties>
-        <Property name="model" type="javax.swing.ComboBoxModel" editor="org.netbeans.modules.form.editors2.ComboBoxModelEditor">
-          <StringArray count="4">
-            <StringItem index="0" value="Item 1"/>
-            <StringItem index="1" value="Item 2"/>
-            <StringItem index="2" value="Item 3"/>
-            <StringItem index="3" value="Item 4"/>
-          </StringArray>
-        </Property>
-      </Properties>
+    <Component class="javax.swing.JComboBox" name="cboEmpleados">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="cboEmpleadosActionPerformed"/>
+      </Events>
       <AuxValues>
         <AuxValue name="JavaCodeGenerator_TypeParameters" type="java.lang.String" value="&lt;String&gt;"/>
       </AuxValues>
+    </Component>
+    <Component class="javax.swing.JLabel" name="lblIdRol">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Tahoma" size="12" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="ID ROL"/>
+      </Properties>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtIdRol">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtIdRolActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JTextField" name="txtRoles">
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="txtRolesActionPerformed"/>
+      </Events>
     </Component>
   </SubComponents>
 </Form>

@@ -18,12 +18,9 @@ public class FrmSalas extends javax.swing.JFrame {
         setLocationRelativeTo(null);
         limpiarCampos();
         cargarTablaSalas();
-        mostrarSiguienteIdSala();
-        
-        
-        tblSalas.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
+        mostrarSiguienteIdSala();     
+    }
+    public void FilaSeleccionada() {
                 int fila = tblSalas.getSelectedRow();
                 if (fila >= 0) {
                     txtIdSalas.setText(tblSalas.getValueAt(fila, 0).toString());
@@ -33,8 +30,6 @@ public class FrmSalas extends javax.swing.JFrame {
                     btnGuardar.setEnabled(false);
                 }
             }
-        });
-    }
     
     private void mostrarSiguienteIdSala() {
         String sql = "SELECT COALESCE(MAX(sala_id), 0) + 1 AS siguienteId FROM salas";
@@ -157,7 +152,8 @@ private void actualizarSala() {
                 JOptionPane.showMessageDialog(this, "Error al eliminar sala: " + e.getMessage());
             }
         }
-    }
+        
+ }
 
 private void limpiarCampos() {
     txtIdSalas.setText("");
@@ -190,6 +186,11 @@ private void limpiarCampos() {
         txtNombreSala = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("GESTION DE FUNCIONES");
@@ -426,6 +427,10 @@ private void limpiarCampos() {
     private void txtNombreSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtNombreSalaActionPerformed
         // TODO add your handling code here:
     }//GEN-LAST:event_txtNombreSalaActionPerformed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        FilaSeleccionada();
+    }//GEN-LAST:event_formMouseClicked
 
     /**
      * @param args the command line arguments

@@ -22,15 +22,13 @@ public class FrmEmpleado extends javax.swing.JFrame {
         cboEstado.removeAllItems();
         cboEstado.setSelectedIndex(-1); 
         btnGuardarEmpleado.setEnabled(true);
-
         mostrarSiguienteIdEmpleado();
         cargarTablaEmpleados();
         mostrarSiguienteIdEmpleado();
-        cargarTablaEmpleados();
-        
-         tblEmpleados.addMouseListener(new java.awt.event.MouseAdapter() {
-             @Override
-             public void mouseClicked(java.awt.event.MouseEvent evt) {
+        cargarTablaEmpleados();          
+    }
+    
+    public void FilaSeleccionada() {
             int fila = tblEmpleados.getSelectedRow();
     if (fila >= 0) {
         txtIdEmpleado.setText(tblEmpleados.getValueAt(fila, 0).toString());
@@ -54,10 +52,6 @@ public class FrmEmpleado extends javax.swing.JFrame {
         btnActualizar.setEnabled(true);
         btnEliminar.setEnabled(true);
         }
-    }
-        });
-         
-         
     }
     private void limpiarCampos() {
     txtIdEmpleado.setText("");
@@ -196,6 +190,11 @@ public void eliminarEmpleado() {
         btnLimpiar = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                formMouseClicked(evt);
+            }
+        });
 
         jLabel2.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         jLabel2.setText("ID EMPLEADO");
@@ -523,6 +522,10 @@ public void eliminarEmpleado() {
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
           limpiarCampos();
     }//GEN-LAST:event_btnLimpiarActionPerformed
+
+    private void formMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_formMouseClicked
+        FilaSeleccionada(); 
+    }//GEN-LAST:event_formMouseClicked
 
     /**
      * @param args the command line arguments

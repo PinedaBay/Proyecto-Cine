@@ -14,15 +14,9 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 
-/**
- *
- * @author user
- */
 public class FrmLogin extends javax.swing.JFrame {
     
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmLogin.class.getName());
-
-   
+    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmLogin.class.getName());   
     public FrmLogin() {
         initComponents();
     }
@@ -46,22 +40,18 @@ public class FrmLogin extends javax.swing.JFrame {
         ResultSet rs = ps.executeQuery();
 
         if (rs.next()) {
-            String rol = rs.getString("nombre_rol");
-            JOptionPane.showMessageDialog(this, "Bienvenido " + usuario + " (" + rol + ")");
-
-            // Abre el formulario correspondiente
-            switch (rol) {
-                case "Administrador" -> {
-                    new FrmPeliculas().setVisible(true);
-                    new FrmFunciones().setVisible(true);
-                    new FrmSalas().setVisible(true);
-                    new FrmEmpleado().setVisible(true);
-                }
-                case "Cajero" -> new FrmVentaBoletos().setVisible(true);
-                default -> JOptionPane.showMessageDialog(this, "Rol no reconocido");
-            }
-            this.dispose(); 
-        } else {
+    // Guardar datos del usuario en SesionUsuario
+    SesionUsuario.usuarioId = rs.getInt("usuario_id");
+    SesionUsuario.nombreUsuario = rs.getString("NombreUsuario");
+    SesionUsuario.rol = rs.getString("nombre_rol");
+    
+    // Abrir FrmPrincipal (la ventana principal)
+    FrmPrincipal principal = new FrmPrincipal();
+    principal.setVisible(true);
+    
+    // Cerrar login
+    this.dispose();
+} else {
             JOptionPane.showMessageDialog(this, "Usuario o contraseña incorrectos");
         }
 
@@ -83,10 +73,7 @@ public class FrmLogin extends javax.swing.JFrame {
     } catch (NoSuchAlgorithmException e) {
         throw new RuntimeException("Error al encriptar contraseña", e);
     }
-}
-
-
-    
+}    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

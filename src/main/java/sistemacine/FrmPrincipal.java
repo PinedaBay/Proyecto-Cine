@@ -1,13 +1,72 @@
 package sistemacine;
+import java.beans.PropertyVetoException;
+import javax.swing.JInternalFrame;
+import javax.swing.JOptionPane;
+
 
 public class FrmPrincipal extends javax.swing.JFrame {
     
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPrincipal.class.getName());
 
     public FrmPrincipal() {
-        initComponents();
-         this.setLocationRelativeTo(null);
+         initComponents();
+        configurarMenusSegunRol();
+        this.setExtendedState(MAXIMIZED_BOTH);
+        this.setLocationRelativeTo(null);        
     }
+    
+    private void configurarMenusSegunRol() {
+    String rol = SesionUsuario.rol;
+
+    menuPeliculas.setVisible(false);
+    menuFunciones.setVisible(false);
+    menuSalas.setVisible(false);
+    menuEmpleados.setVisible(false);
+    menuVentas.setVisible(false);
+    menuUsuarios.setVisible(false);
+
+    // Mostrar pantallas segun rol
+    switch (rol) {
+        case "Administrador" -> {
+            menuPeliculas.setVisible(true);
+            menuFunciones.setVisible(true);
+            menuSalas.setVisible(true);
+            menuEmpleados.setVisible(true);
+            menuVentas.setVisible(true);
+            menuUsuarios.setVisible(true);
+            }
+
+        case "Cajero" -> menuVentas.setVisible(true);
+        case "Taquillero" -> menuVentas.setVisible(true);
+        case "Gerente" -> {menuSalas.setVisible(true);
+                          menuFunciones.setVisible(true);}
+        case "Supervisor" -> {menuSalas.setVisible(true);
+                          menuFunciones.setVisible(true);}
+        case "Asistente" -> {menuSalas.setVisible(true);
+                            menuFunciones.setVisible(true);
+                            menuVentas.setVisible(true);}                          
+      default -> JOptionPane.showMessageDialog(this, "Rol desconocido: " + rol);
+    }
+    }
+    
+ private void abrirFormulario(JInternalFrame formulario) throws PropertyVetoException {
+    // Verificar si el formulario ya está abierto
+    for (JInternalFrame frame : desktopPane.getAllFrames()) {
+        if (frame.getClass().equals(formulario.getClass())) {
+            frame.setSelected(true);
+            frame.toFront();
+            return; // Ya está abierto
+        }
+    }
+
+    // Ajustar tamaño del formulario al tamaño del desktopPane
+    formulario.setSize(desktopPane.getSize());
+    formulario.setLocation(0, 0); // Para que quede bien alineado
+
+    // Agregar al desktopPane
+    desktopPane.add(formulario);
+    formulario.setVisible(true);
+}
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -20,6 +79,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
         menuSalas = new javax.swing.JMenu();
         menuEmpleados = new javax.swing.JMenu();
         menuVentas = new javax.swing.JMenu();
+        menuUsuarios = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -103,6 +163,19 @@ public class FrmPrincipal extends javax.swing.JFrame {
         });
         jMenuBar1.add(menuVentas);
 
+        menuUsuarios.setText("Usuarios");
+        menuUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                menuUsuariosMouseClicked(evt);
+            }
+        });
+        menuUsuarios.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menuUsuariosActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(menuUsuarios);
+
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -158,15 +231,21 @@ public class FrmPrincipal extends javax.swing.JFrame {
         new FrmVentaBoletos().setVisible(true);
     }//GEN-LAST:event_menuVentasMouseClicked
 
+    private void menuUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsuariosMouseClicked
+       new FrmUsuarios().setVisible(true);
+    }//GEN-LAST:event_menuUsuariosMouseClicked
+
+    private void menuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUsuariosActionPerformed
+        FrmUsuarios u = new FrmUsuarios();
+        desktopPane.add(u);
+        u.setVisible(true);
+    }//GEN-LAST:event_menuUsuariosActionPerformed
+
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
+         new FrmLogin().setVisible(true);
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {
@@ -176,12 +255,8 @@ public class FrmPrincipal extends javax.swing.JFrame {
             }
         } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
             logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmPrincipal().setVisible(true));
-    }
+        }      
+    }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktopPane;
@@ -190,6 +265,7 @@ public class FrmPrincipal extends javax.swing.JFrame {
     private javax.swing.JMenu menuFunciones;
     private javax.swing.JMenu menuPeliculas;
     private javax.swing.JMenu menuSalas;
+    private javax.swing.JMenu menuUsuarios;
     private javax.swing.JMenu menuVentas;
     // End of variables declaration//GEN-END:variables
 }
