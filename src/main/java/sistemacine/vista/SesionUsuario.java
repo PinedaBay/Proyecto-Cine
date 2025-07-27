@@ -1,5 +1,5 @@
 
-package sistemacine;
+package sistemacine.vista;
 
     public class SesionUsuario {
     public static int usuarioId;

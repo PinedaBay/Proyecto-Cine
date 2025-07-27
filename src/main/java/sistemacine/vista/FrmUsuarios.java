@@ -1,5 +1,5 @@
 
-package sistemacine;
+package sistemacine.vista;
 
 import java.awt.HeadlessException;
 import java.io.UnsupportedEncodingException;
@@ -14,8 +14,9 @@ import java.util.HashMap;
 import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sistemacine.modelo.Conexion;
 
-public class FrmUsuarios extends javax.swing.JFrame {  
+public class FrmUsuarios extends javax.swing.JInternalFrame {  
 
     public FrmUsuarios() {
         initComponents();
@@ -82,48 +83,107 @@ private void cargarEmpleados() {
         }
     }
 
-  private void BotonGuardar() {
-    String usuario = txtUsuario.getText();
-    String contrasena = new String(txtContrasenia.getPassword());
-    if (usuario.isEmpty() || contrasena.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Todos los campos son obligatorios.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    // Obtengo el rolId directamente del campo txtIdRol (que se actualiza al seleccionar empleado)
-    String rolIdText = txtIdRol.getText();
-    if (rolIdText.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "No se ha asignado un rol al empleado seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
-        return;
-    }
-    int rolId = Integer.parseInt(rolIdText);
-    try (Connection con = Conexion.getConexion()) {
-        String hash = encriptarSHA256(contrasena);
-        // Insertar usuario
-        String sqlUsuario = "INSERT INTO usuarios (NombreUsuario, Contrasenia) VALUES (?, ?)";
-        PreparedStatement ps = con.prepareStatement(sqlUsuario, Statement.RETURN_GENERATED_KEYS);
-        ps.setString(1, usuario);
-        ps.setString(2, hash);
-        ps.executeUpdate();
-        ResultSet rs = ps.getGeneratedKeys();
-        int usuarioId = 0;
-        if (rs.next()) {
-            usuarioId = rs.getInt(1);
+private void BotonGuardar(){
+    Connection con = null;
+        try {
+            con = Conexion.getConexion();
+        } catch (SQLException ex) {
+            System.getLogger(FrmUsuarios.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
         }
-        // Insertar relación usuarios_roles con el rol del empleado
-        String sqlUR = "INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (?, ?)";
-        PreparedStatement psUR = con.prepareStatement(sqlUR);
-        psUR.setInt(1, usuarioId);
-        psUR.setInt(2, rolId);
-        psUR.executeUpdate();
-        JOptionPane.showMessageDialog(this, "Usuario guardado exitosamente con el rol asignado al empleado.", "Éxito", JOptionPane.INFORMATION_MESSAGE);
-        cargarTablaUsuarios();
-        limpiarCampos();
 
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Error al guardar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
+    try {
+        String usuario = txtUsuario.getText().trim();
+        String contrasena = new String(txtContrasenia.getPassword()).trim();
+        String rolIdText = txtIdRol.getText().trim();
+        if (usuario.isEmpty() || contrasena.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El campo usuario y contraseña no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        if (contrasena.length() < 6) {
+            JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 6 caracteres.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (!usuario.matches("[a-zA-Z0-9_]+")) {
+            JOptionPane.showMessageDialog(this, "El nombre de usuario solo puede contener letras, números y guiones bajos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        if (cboEmpleados.getSelectedIndex() == -1) {
+            JOptionPane.showMessageDialog(this, "Debe seleccionar un empleado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        if (rolIdText.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "El empleado seleccionado no tiene un rol asignado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+
+        String sqlCheckUsuario = "SELECT COUNT(*) FROM usuarios WHERE NombreUsuario = ?";
+        PreparedStatement psCheckUsuario = con.prepareStatement(sqlCheckUsuario);
+        psCheckUsuario.setString(1, usuario);
+        ResultSet rsUsuario = psCheckUsuario.executeQuery();
+        if (rsUsuario.next() && rsUsuario.getInt(1) > 0) {
+            JOptionPane.showMessageDialog(this, "El nombre de usuario ya existe. Por favor elige otro.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+        String empleadoSeleccionado = (String) cboEmpleados.getSelectedItem();
+        int idEmpleado = empleadoMap.getOrDefault(empleadoSeleccionado, -1);
+        if (idEmpleado == -1) {
+            JOptionPane.showMessageDialog(this, "Error al obtener el ID del empleado seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
+            return;
+        }
+        String sqlCheckEmpleado = "SELECT COUNT(*) FROM usuarios WHERE empleado_id = ?";
+        PreparedStatement psCheckEmpleado = con.prepareStatement(sqlCheckEmpleado);
+        psCheckEmpleado.setInt(1, idEmpleado);
+        ResultSet rsEmpleado = psCheckEmpleado.executeQuery();
+        if (rsEmpleado.next() && rsEmpleado.getInt(1) > 0) {
+            JOptionPane.showMessageDialog(this, "Este empleado ya tiene un usuario asignado.", "Advertencia", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
+
+        // 🔐 Encriptar la contraseña (SHA-256)
+        MessageDigest md = MessageDigest.getInstance("SHA-256");
+        byte[] hash = md.digest(contrasena.getBytes("UTF-8"));
+        StringBuilder sb = new StringBuilder();
+        for (byte b : hash) {
+            sb.append(String.format("%02x", b));
+        }
+        String contrasenaEncriptada = sb.toString();
+
+        // ✅ Insertar usuario
+        String sqlInsertUsuario = "INSERT INTO usuarios (NombreUsuario, Contraseña, empleado_id) VALUES (?, ?, ?)";
+        PreparedStatement psInsertUsuario = con.prepareStatement(sqlInsertUsuario, Statement.RETURN_GENERATED_KEYS);
+        psInsertUsuario.setString(1, usuario);
+        psInsertUsuario.setString(2, contrasenaEncriptada);
+        psInsertUsuario.setInt(3, idEmpleado);
+        psInsertUsuario.executeUpdate();
+
+        // Obtener ID generado del usuario
+        ResultSet rsKeys = psInsertUsuario.getGeneratedKeys();
+        int usuarioId = -1;
+        if (rsKeys.next()) {
+            usuarioId = rsKeys.getInt(1);
+        }
+
+        // Insertar en tabla usuarios_roles
+        int rolId = Integer.parseInt(txtIdRol.getText().trim());
+        String sqlInsertRol = "INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (?, ?)";
+        PreparedStatement psInsertRol = con.prepareStatement(sqlInsertRol);
+        psInsertRol.setInt(1, usuarioId);
+        psInsertRol.setInt(2, rolId);
+        psInsertRol.executeUpdate();
+
+        JOptionPane.showMessageDialog(this, "Usuario guardado correctamente.");
+        limpiarCampos();
+        cargarEmpleados();
+
+    } catch (SQLException | HeadlessException | NumberFormatException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
+        JOptionPane.showMessageDialog(this, "Error al guardar el usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
 }
 
+       
 private void BotonEliminar() {
     int fila = tblUsuarios.getSelectedRow();
     if (fila == -1) {
@@ -166,7 +226,6 @@ private void BotonActualizar() {
         }
         try (Connection con = Conexion.getConexion()) {
             String sql;
-            // Si el usuario escribió contraseña nueva, actualizamos la contraseña
             if (!contrasena.isEmpty()) {
                 String hash = encriptarSHA256(contrasena);
                 sql = "UPDATE usuarios SET NombreUsuario = ?, Contrasenia = ? WHERE usuario_id = ?";
@@ -183,7 +242,6 @@ private void BotonActualizar() {
                 ps.setInt(2, usuarioId);
                 ps.executeUpdate();
             }
-            // Actualizamos el rol
             String sqlRolId = "SELECT rol_id FROM roles WHERE nombre_rol = ?";
             PreparedStatement psRol = con.prepareStatement(sqlRolId);            
             ResultSet rsRol = psRol.executeQuery();
@@ -211,7 +269,6 @@ private void limpiarCampos() {
 
 private void cargarRolDesdeEmpleado(int empleadoId) {
     try (Connection con = Conexion.getConexion()) {
-        // Obtener el cargo (nombre del rol) del empleado
         String sql = "SELECT cargo FROM empleados WHERE empleado_id = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         ps.setInt(1, empleadoId);
@@ -219,8 +276,6 @@ private void cargarRolDesdeEmpleado(int empleadoId) {
 
         if (rs.next()) {
             String cargo = rs.getString("cargo");
-
-            // Buscar el rol con ese nombre
             sql = "SELECT rol_id, nombre_rol FROM roles WHERE nombre_rol = ?";
             ps = con.prepareStatement(sql);
             ps.setString(1, cargo);
@@ -244,6 +299,27 @@ private void cargarRolDesdeEmpleado(int empleadoId) {
         txtRoles.setText("");
     }
 }
+private void FilaSeleccionada() {
+    int fila = tblUsuarios.getSelectedRow();
+    if (fila >= 0) {
+        String nombreUsuario = tblUsuarios.getValueAt(fila, 1).toString();
+        txtUsuario.setText(nombreUsuario);
+        txtContrasenia.setText("");String nombreRol = tblUsuarios.getValueAt(fila, 2).toString();
+        txtRoles.setText(nombreRol);
+        try (Connection con = Conexion.getConexion()) {
+            String sql = "SELECT rol_id FROM roles WHERE nombre_rol = ?";
+            PreparedStatement ps = con.prepareStatement(sql);
+            ps.setString(1, nombreRol);
+            ResultSet rs = ps.executeQuery();
+            if (rs.next()) {
+                txtIdRol.setText(String.valueOf(rs.getInt("rol_id")));
+            }
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al obtener ID de rol: " + e.getMessage());
+        }
+    }
+}
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -268,7 +344,7 @@ private void cargarRolDesdeEmpleado(int empleadoId) {
         txtIdRol = new javax.swing.JTextField();
         txtRoles = new javax.swing.JTextField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("GESTION DE USUARIOS");
@@ -299,9 +375,14 @@ private void cargarRolDesdeEmpleado(int empleadoId) {
                 {null, null, null, null}
             },
             new String [] {
-                "ID USAUARIO", "Title 2", "Title 3", "Title 4"
+                "", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tblUsuarios.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tblUsuariosMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tblUsuarios);
 
         lblRoles.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
@@ -371,29 +452,26 @@ private void cargarRolDesdeEmpleado(int empleadoId) {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(75, 75, 75)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGap(212, 212, 212)
-                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
+                        .addGap(37, 37, 37)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(lblRoles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblContrasenia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(lblUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblEmpleados, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
                             .addComponent(lblIdRol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(76, 76, 76)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(txtUsuario)
-                            .addComponent(txtContrasenia)
-                            .addComponent(cboEmpleados, 0, 204, Short.MAX_VALUE)
-                            .addComponent(txtIdRol)
-                            .addComponent(txtRoles, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 58, Short.MAX_VALUE)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 401, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 107, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(txtIdRol, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtContrasenia, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtUsuario, javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(cboEmpleados, javax.swing.GroupLayout.Alignment.LEADING, 0, 182, Short.MAX_VALUE)
+                            .addComponent(txtRoles))
+                        .addGap(29, 29, 29)
+                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(158, 158, 158)
                         .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(btnGuardar)
@@ -402,46 +480,52 @@ private void cargarRolDesdeEmpleado(int empleadoId) {
                         .addGap(18, 18, 18)
                         .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(86, 86, 86)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(36, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(347, 347, 347))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(31, 31, 31)
-                .addComponent(jLabel1)
-                .addGap(8, 8, 8)
+                .addGap(19, 19, 19)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(45, 45, 45)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblEmpleados)
-                            .addComponent(cboEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(16, 16, 16)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(7, 7, 7)
+                                .addComponent(lblEmpleados))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                                .addComponent(cboEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGap(35, 35, 35)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblUsuarios)
                             .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
+                        .addGap(41, 41, 41)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblContrasenia)
                             .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(3, 3, 3)
+                        .addGap(31, 31, 31)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblIdRol)
                             .addComponent(txtIdRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGap(34, 34, 34)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(lblRoles)
-                            .addComponent(txtRoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 146, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 50, Short.MAX_VALUE)
+                            .addComponent(txtRoles)))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
+                .addGap(90, 90, 90)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(btnNuevo)
                     .addComponent(btnGuardar)
                     .addComponent(btnActualizar)
                     .addComponent(btnEliminar)
                     .addComponent(btnCerrar))
-                .addContainerGap(265, Short.MAX_VALUE))
+                .addGap(106, 106, 106))
         );
 
         pack();
@@ -487,10 +571,10 @@ private void cargarRolDesdeEmpleado(int empleadoId) {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtRolesActionPerformed
 
-    public static void main(String args[]) {
-        
-        java.awt.EventQueue.invokeLater(() -> new FrmUsuarios().setVisible(true));
-    }
+    private void tblUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblUsuariosMouseClicked
+         FilaSeleccionada();
+    }//GEN-LAST:event_tblUsuariosMouseClicked
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;

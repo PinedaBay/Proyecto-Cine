@@ -1,210 +1,84 @@
 
-package sistemacine;
+package sistemacine.vista;
 
-import java.sql.Connection;
-import java.sql.PreparedStatement;
-import java.sql.ResultSet;
-import java.sql.Statement;
+import java.sql.SQLException;
+import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import static sistemacine.Conexion.getConexion;
+import sistemacine.controlador.PeliculasController;
+import sistemacine.modelo.Pelicula;
+import sistemacine.modelo.PeliculasDAO;
 
-public final class FrmPeliculas extends javax.swing.JFrame {
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPeliculas.class.getName());
-    DefaultTableModel modeloTabla;
-    
+public final class FrmPeliculas extends javax.swing.JInternalFrame {    
+
+    private final PeliculasController controlador;
     public FrmPeliculas() {
         initComponents();
-        setLocationRelativeTo(null);
-        limpiar();
-        
-        modeloTabla = (DefaultTableModel) this.jTable1.getModel();
-        cargarTabla();
-       mostrarSiguienteId();      
-    }   
-        
-public void filaSeleccionada() {
-            int fila = jTable1.getSelectedRow();
-            if (fila >= 0) {
-                txtId.setText(jTable1.getValueAt(fila, 0).toString());
-                txtTitulo.setText(jTable1.getValueAt(fila, 1).toString());
-                txtDuracion.setText(jTable1.getValueAt(fila, 2).toString());
-                txtSinopsis.setText(jTable1.getValueAt(fila, 3).toString());
-                txtClasificacion.setText(jTable1.getValueAt(fila, 4).toString());
-                BTNGuardar.setEnabled(false); 
-            }
-        }  
+        limpiarCampos();
+        cargarSiguienteId();
+        PeliculasDAO modelo = new PeliculasDAO();
+        controlador = new PeliculasController(this, modelo);
+    }
+private void cargarSiguienteId() {
+    PeliculasDAO dao = new PeliculasDAO();
+    try {
+        int siguienteId = dao.obtenerSiguienteId();
+        txtId.setText(String.valueOf(siguienteId));
+    } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Error al obtener ID: " + ex.getMessage());
+    }
+}
+private void cargarDatosDeFilaSeleccionada() {
+    int fila = TablaPeliculas.getSelectedRow();
+    if (fila >= 0) {
+        txtId.setText(TablaPeliculas.getValueAt(fila, 0).toString()); 
+        txtTitulo.setText(TablaPeliculas.getValueAt(fila, 1).toString());     
+        txtDuracion.setText(TablaPeliculas.getValueAt(fila, 2).toString());   
+        txtSinopsis.setText(TablaPeliculas.getValueAt(fila, 3).toString());   
+        txtClasificacion.setText(TablaPeliculas.getValueAt(fila, 4).toString()); 
 
-public void mostrarSiguienteId() {
-   String sql = "SELECT IFNULL(MAX(pelicula_id), 0) + 1 AS siguienteId FROM peliculas";
-
-    try (Connection conn = getConexion();
-         PreparedStatement ps = conn.prepareStatement(sql);
-         ResultSet rs = ps.executeQuery()) {
-
-        if (rs.next()) {
-            int siguienteId = rs.getInt("siguienteId");
-            txtId.setText(String.valueOf(siguienteId));
-        }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "No se pudo obtener el siguiente ID: " + e.getMessage());
+        // Opcional: Desactivar guardar y activar actualizar/eliminar
+        btnGuardar.setEnabled(false);
+        btnEditar.setEnabled(true);
+        btnEliminar.setEnabled(true);
+        txtId.setEditable(false);
     }
 }
 
 
-    public void cargarTabla(){
-     modeloTabla.setRowCount(0);
-    String sql = "SELECT * FROM PELICULAS";
-
-    try (Connection conn = getConexion();
-         Statement st = conn.createStatement();
-         ResultSet rs = st.executeQuery(sql)) {
-
-        while (rs.next()) {
-            modeloTabla.addRow(new Object[]{
-                rs.getString(1), rs.getString(2), rs.getString(3),
-                rs.getString(4), rs.getString(5)
-            });
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al cargar tabla: " + e.getMessage());
+public Pelicula getPeliculaDesdeFormulario() {
+    Pelicula p = new Pelicula();
+    if (!txtId.getText().isEmpty()) {
+        p.setId(Integer.parseInt(txtId.getText()));
     }
-    }
-    
-    public void guardar() {
-      String sql = "INSERT INTO peliculas (titulo, duracion, sinopsis, clasificacion) VALUES (?, ?, ?, ?)";
-    try (Connection conn = getConexion();
-         PreparedStatement ps = conn.prepareStatement(sql, PreparedStatement.RETURN_GENERATED_KEYS)) {
-
-        ps.setString(1, txtTitulo.getText());
-        ps.setInt(2, Integer.parseInt(txtDuracion.getText()));
-        ps.setString(3, txtSinopsis.getText());
-        ps.setString(4, txtClasificacion.getText());
-
-        int filas = ps.executeUpdate();
-
-        if (filas > 0) {
-            // Obtener el ID generado automáticamente
-            try (ResultSet rs = ps.getGeneratedKeys()) {
-                if (rs.next()) {
-                    int nuevoId = rs.getInt(1);
-                    txtId.setText(String.valueOf(nuevoId)); // Mostrar el nuevo ID en el campo
-                }
-            }
-            JOptionPane.showMessageDialog(null, "Película guardada con éxito. ID: " + txtId.getText());
-            cargarTabla();   
-            limpiar();
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al guardar: " + e.getMessage());
-    }
+    p.setTitulo(txtTitulo.getText());
+    p.setDuracion(Integer.parseInt(txtDuracion.getText()));
+    p.setSinopsis(txtSinopsis.getText());
+    p.setClasificacion(txtClasificacion.getText());
+    return p;
 }
 
-public void editar() {
-    String sql = "UPDATE peliculas SET titulo = ?, duracion = ?, sinopsis = ?, clasificacion = ? WHERE pelicula_id = ?";
-    try (Connection conn = getConexion();
-         PreparedStatement ps = conn.prepareStatement(sql)) {
-        ps.setString(1, txtTitulo.getText());
-        ps.setInt(2, Integer.parseInt(txtDuracion.getText()));
-        ps.setString(3, txtSinopsis.getText());
-        ps.setString(4, txtClasificacion.getText());
-        ps.setInt(5, Integer.parseInt(txtId.getText()));
-        int filas = ps.executeUpdate();
-        if (filas > 0) {
-            JOptionPane.showMessageDialog(null, "Película actualizada con éxito");
-            cargarTabla();   
-            limpiar(); 
-        } else {
-            JOptionPane.showMessageDialog(null, "No se encontró la película para actualizar");
-        }
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error al actualizar: " + e.getMessage());
-    }
-     
-}
-
-public void eliminar() {
-     int fila = jTable1.getSelectedRow();
-    if (fila == -1) {
-        JOptionPane.showMessageDialog(null, "Seleccione una película para eliminar.");
-        return;
-    }
-
-    int id = Integer.parseInt(jTable1.getValueAt(fila, 0).toString());
-
-    int confirmar = JOptionPane.showConfirmDialog(null, "Se eliminarán también las funciones, boletos y géneros relacionados. ¿Desea continuar?", "Confirmar", JOptionPane.YES_NO_OPTION);
-    if (confirmar != JOptionPane.YES_OPTION) return;
-
-    try (Connection conn = getConexion()) {
-        conn.setAutoCommit(false);
-
-        // 1. Eliminar boletos de funciones relacionadas a la película
-        String sqlBoletos = """
-            DELETE B FROM boletos B
-            JOIN funciones F ON B.funcion_id = F.funcion_id
-            WHERE F.pelicula_id = ?;
-        """;
-
-        // 2. Eliminar funciones de la película
-        String sqlFunciones = "DELETE FROM funciones WHERE pelicula_id = ?";
-
-        // 3. Eliminar relación con géneros
-        String sqlPeliculasGenero = "DELETE FROM peliculas_genero WHERE pelicula_id = ?";
-
-        // 4. Eliminar la película
-        String sqlPelicula = "DELETE FROM peliculas WHERE pelicula_id = ?";
-
-        try (
-            PreparedStatement ps1 = conn.prepareStatement(sqlBoletos);
-            PreparedStatement ps2 = conn.prepareStatement(sqlFunciones);
-            PreparedStatement ps3 = conn.prepareStatement(sqlPeliculasGenero);
-            PreparedStatement ps4 = conn.prepareStatement(sqlPelicula)
-        ) {
-            ps1.setInt(1, id);
-            ps1.executeUpdate();
-
-            ps2.setInt(1, id);
-            ps2.executeUpdate();
-
-            ps3.setInt(1, id);
-            ps3.executeUpdate();
-
-            ps4.setInt(1, id);
-            int filas = ps4.executeUpdate();
-
-            conn.commit();
-
-            if (filas > 0) {
-                JOptionPane.showMessageDialog(null, "Película eliminada correctamente.");
-                cargarTabla();
-                limpiar();
-            } else {
-                JOptionPane.showMessageDialog(null, "No se pudo eliminar la película.");
-            }
-
-        } catch (Exception ex) {
-            conn.rollback();
-            JOptionPane.showMessageDialog(null, "Error al eliminar: " + ex.getMessage());
-        }
-
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(null, "Error de conexión: " + e.getMessage());
+public void llenarTabla(List<Pelicula> peliculas) {
+    DefaultTableModel modelo = (DefaultTableModel) TablaPeliculas.getModel();
+    modelo.setRowCount(0); 
+    for (Pelicula p : peliculas) {
+        modelo.addRow(new Object[] {
+            p.getId(), p.getTitulo(), p.getDuracion(), p.getSinopsis(), p.getClasificacion()
+        });
     }
 }
-
-public void limpiar() {
+public void limpiarCampos() {
     txtId.setText("");
     txtTitulo.setText("");
     txtDuracion.setText("");
     txtSinopsis.setText("");
     txtClasificacion.setText("");
-    mostrarSiguienteId(); // ← MOVER AQUÍ
- 
 }
 
-    
+public void mostrarMensaje(String mensaje) {
+    JOptionPane.showMessageDialog(this, mensaje);
+}
+   
    
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
@@ -219,11 +93,11 @@ public void limpiar() {
         txtClasificacion = new javax.swing.JTextField();
         jScrollPane1 = new javax.swing.JScrollPane();
         txtSinopsis = new javax.swing.JTextArea();
-        BTNGuardar = new javax.swing.JButton();
+        btnGuardar = new javax.swing.JButton();
         btnEditar = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
+        TablaPeliculas = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
         lblTitulo1 = new javax.swing.JLabel();
         txtId = new javax.swing.JTextField();
@@ -270,11 +144,11 @@ public void limpiar() {
         txtSinopsis.setWrapStyleWord(true);
         jScrollPane1.setViewportView(txtSinopsis);
 
-        BTNGuardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
-        BTNGuardar.setText("GUARDAR");
-        BTNGuardar.addActionListener(new java.awt.event.ActionListener() {
+        btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
+        btnGuardar.setText("GUARDAR");
+        btnGuardar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                BTNGuardarActionPerformed(evt);
+                btnGuardarActionPerformed(evt);
             }
         });
 
@@ -294,7 +168,7 @@ public void limpiar() {
             }
         });
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        TablaPeliculas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null, null},
                 {null, null, null, null, null},
@@ -305,20 +179,20 @@ public void limpiar() {
                 "ID PELICULA", "TITULO", "DURACION", "SINOPSIS", "CLASIFICACION"
             }
         ));
-        jTable1.addMouseListener(new java.awt.event.MouseAdapter() {
+        TablaPeliculas.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTable1MouseClicked(evt);
+                TablaPeliculasMouseClicked(evt);
             }
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                jTable1MousePressed(evt);
+                TablaPeliculasMousePressed(evt);
             }
         });
-        jTable1.addKeyListener(new java.awt.event.KeyAdapter() {
+        TablaPeliculas.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
-                jTable1KeyPressed(evt);
+                TablaPeliculasKeyPressed(evt);
             }
         });
-        jScrollPane2.setViewportView(jTable1);
+        jScrollPane2.setViewportView(TablaPeliculas);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("GESTION DE PELICULAS PARA ADMINISTRADOR");
@@ -326,7 +200,10 @@ public void limpiar() {
         lblTitulo1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblTitulo1.setText("ID");
 
+        txtId.setEditable(false);
         txtId.setText("jTextField1");
+        txtId.setDisabledTextColor(new java.awt.Color(204, 204, 204));
+        txtId.setOpaque(true);
         txtId.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdActionPerformed(evt);
@@ -392,7 +269,7 @@ public void limpiar() {
                                 .addGap(35, 35, 35)
                                 .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(BTNGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -446,7 +323,7 @@ public void limpiar() {
                         .addComponent(btnNuevo))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(2, 2, 2)
-                        .addComponent(BTNGuardar))
+                        .addComponent(btnGuardar))
                     .addGroup(layout.createSequentialGroup()
                         .addGap(4, 4, 4)
                         .addComponent(btnEliminar)))
@@ -454,7 +331,6 @@ public void limpiar() {
         );
 
         pack();
-        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void txtDuracionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtDuracionActionPerformed
@@ -465,15 +341,12 @@ public void limpiar() {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtClasificacionActionPerformed
 
-    private void BTNGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_BTNGuardarActionPerformed
-        guardar();
-        limpiar();
-        mostrarSiguienteId();  
-    }//GEN-LAST:event_BTNGuardarActionPerformed
+    private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
+            controlador.guardarPelicula();
+    }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
-        limpiar();
-        mostrarSiguienteId();         
+            limpiarCampos();
          
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
@@ -486,70 +359,58 @@ public void limpiar() {
     }//GEN-LAST:event_txtIdActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-        editar();
+            controlador.actualizarPelicula();
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
-        limpiar(); 
-        BTNGuardar.setEnabled(true); 
+         btnGuardar.setEnabled(true); 
+         PeliculasDAO dao = new PeliculasDAO();
+         try {
+        int siguienteId = dao.obtenerSiguienteId();
+        txtId.setText(String.valueOf(siguienteId));
+        } catch (SQLException ex) {
+        JOptionPane.showMessageDialog(this, "Error al obtener ID: " + ex.getMessage());
+         }
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-        eliminar();
+            int fila = TablaPeliculas.getSelectedRow();
+            if (fila == -1) {
+            mostrarMensaje("Seleccione una película para eliminar.");
+            return;
+             }
+            int id = Integer.parseInt(TablaPeliculas.getValueAt(fila, 0).toString());
+            controlador.eliminarPelicula(id);
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         dispose();
     }//GEN-LAST:event_btnCerrarActionPerformed
 
-    private void jTable1KeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_jTable1KeyPressed
+    private void TablaPeliculasKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_TablaPeliculasKeyPressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTable1KeyPressed
+    }//GEN-LAST:event_TablaPeliculasKeyPressed
 
-    private void jTable1MousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MousePressed
+    private void TablaPeliculasMousePressed(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaPeliculasMousePressed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jTable1MousePressed
+    }//GEN-LAST:event_TablaPeliculasMousePressed
 
-    private void jTable1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTable1MouseClicked
-        filaSeleccionada();
-    }//GEN-LAST:event_jTable1MouseClicked
+    private void TablaPeliculasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaPeliculasMouseClicked
+            cargarDatosDeFilaSeleccionada();
+    }//GEN-LAST:event_TablaPeliculasMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmPeliculas().setVisible(true));
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JButton BTNGuardar;
+    public javax.swing.JTable TablaPeliculas;
     private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEditar;
     private javax.swing.JButton btnEliminar;
+    private javax.swing.JButton btnGuardar;
     private javax.swing.JButton btnLimpiar;
-    private javax.swing.JButton btnNuevo;
+    public javax.swing.JButton btnNuevo;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
-    private javax.swing.JTable jTable1;
     private javax.swing.JLabel lblClasificacion;
     private javax.swing.JLabel lblDuracion;
     private javax.swing.JLabel lblSonopsis;
@@ -561,4 +422,8 @@ public void limpiar() {
     private javax.swing.JTextArea txtSinopsis;
     private javax.swing.JTextField txtTitulo;
     // End of variables declaration//GEN-END:variables
+
+    public Object getTablaPeliculas() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
 }

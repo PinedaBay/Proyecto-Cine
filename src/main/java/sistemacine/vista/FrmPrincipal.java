@@ -1,15 +1,10 @@
-package sistemacine;
-import java.beans.PropertyVetoException;
+package sistemacine.vista;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
-
-
-public class FrmPrincipal extends javax.swing.JFrame {
-    
+public class FrmPrincipal extends javax.swing.JFrame {    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPrincipal.class.getName());
-
     public FrmPrincipal() {
-         initComponents();
+        initComponents();
         configurarMenusSegunRol();
         this.setExtendedState(MAXIMIZED_BOTH);
         this.setLocationRelativeTo(null);        
@@ -17,15 +12,12 @@ public class FrmPrincipal extends javax.swing.JFrame {
     
     private void configurarMenusSegunRol() {
     String rol = SesionUsuario.rol;
-
     menuPeliculas.setVisible(false);
     menuFunciones.setVisible(false);
     menuSalas.setVisible(false);
     menuEmpleados.setVisible(false);
     menuVentas.setVisible(false);
     menuUsuarios.setVisible(false);
-
-    // Mostrar pantallas segun rol
     switch (rol) {
         case "Administrador" -> {
             menuPeliculas.setVisible(true);
@@ -35,7 +27,6 @@ public class FrmPrincipal extends javax.swing.JFrame {
             menuVentas.setVisible(true);
             menuUsuarios.setVisible(true);
             }
-
         case "Cajero" -> menuVentas.setVisible(true);
         case "Taquillero" -> menuVentas.setVisible(true);
         case "Gerente" -> {menuSalas.setVisible(true);
@@ -47,25 +38,16 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             menuVentas.setVisible(true);}                          
       default -> JOptionPane.showMessageDialog(this, "Rol desconocido: " + rol);
     }
-    }
-    
- private void abrirFormulario(JInternalFrame formulario) throws PropertyVetoException {
-    // Verificar si el formulario ya está abierto
+    }    
+private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
     for (JInternalFrame frame : desktopPane.getAllFrames()) {
-        if (frame.getClass().equals(formulario.getClass())) {
-            frame.setSelected(true);
-            frame.toFront();
-            return; // Ya está abierto
-        }
+        frame.dispose(); 
     }
-
-    // Ajustar tamaño del formulario al tamaño del desktopPane
-    formulario.setSize(desktopPane.getSize());
-    formulario.setLocation(0, 0); // Para que quede bien alineado
-
-    // Agregar al desktopPane
-    desktopPane.add(formulario);
-    formulario.setVisible(true);
+    desktopPane.add(nuevoFormulario);
+    nuevoFormulario.setVisible(true);
+    int x = (desktopPane.getWidth() - nuevoFormulario.getWidth())/2;
+    int y = (desktopPane.getHeight() - nuevoFormulario.getHeight())/2;
+    nuevoFormulario.setLocation(x, y);
 }
 
     @SuppressWarnings("unchecked")
@@ -206,33 +188,31 @@ public class FrmPrincipal extends javax.swing.JFrame {
     }//GEN-LAST:event_menuFuncionesActionPerformed
 
     private void menuPeliculasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuPeliculasActionPerformed
-        FrmPeliculas p = new FrmPeliculas();
-        desktopPane.add(p);
-        p.setVisible(true);
+       // abrirFormularioUnico(new FrmPeliculas());
     }//GEN-LAST:event_menuPeliculasActionPerformed
 
     private void menuPeliculasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuPeliculasMouseClicked
-        new FrmPeliculas().setVisible(true);
+        abrirFormularioUnico(new FrmPeliculas());
     }//GEN-LAST:event_menuPeliculasMouseClicked
 
     private void menuFuncionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuFuncionesMouseClicked
-        new FrmFunciones().setVisible(true);
+        abrirFormularioUnico(new FrmFunciones());
     }//GEN-LAST:event_menuFuncionesMouseClicked
 
     private void menuSalasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuSalasMouseClicked
-        new FrmSalas().setVisible(true);
+        abrirFormularioUnico(new FrmSalas());
     }//GEN-LAST:event_menuSalasMouseClicked
 
     private void menuEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuEmpleadosMouseClicked
-        new FrmEmpleado().setVisible(true);
+        abrirFormularioUnico(new FrmEmpleado());
     }//GEN-LAST:event_menuEmpleadosMouseClicked
 
     private void menuVentasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuVentasMouseClicked
-        new FrmVentaBoletos().setVisible(true);
+        abrirFormularioUnico(new FrmVentaBoletos());
     }//GEN-LAST:event_menuVentasMouseClicked
 
     private void menuUsuariosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_menuUsuariosMouseClicked
-       new FrmUsuarios().setVisible(true);
+       abrirFormularioUnico(new FrmUsuarios());
     }//GEN-LAST:event_menuUsuariosMouseClicked
 
     private void menuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUsuariosActionPerformed
@@ -241,11 +221,9 @@ public class FrmPrincipal extends javax.swing.JFrame {
         u.setVisible(true);
     }//GEN-LAST:event_menuUsuariosActionPerformed
 
-    /**
-     * @param args the command line arguments
-     */
     public static void main(String args[]) {
          new FrmLogin().setVisible(true);
+         
         try {
             for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
                 if ("Nimbus".equals(info.getName())) {

@@ -1,5 +1,5 @@
 
-package sistemacine;
+package sistemacine.vista;
 
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -7,16 +7,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import sistemacine.modelo.Conexion;
 
 
-public class FrmEmpleado extends javax.swing.JFrame {
-    
-    private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmEmpleado.class.getName());
+public class FrmEmpleado extends javax.swing.JInternalFrame {  
 
-    
     public FrmEmpleado() {
         initComponents();
-        setLocationRelativeTo(null);
         limpiarCampos();
         configurarPopupCombo();
         cboEstado.removeAllItems();
@@ -47,7 +44,6 @@ public class FrmEmpleado extends javax.swing.JFrame {
         } else {
             cboEstado.setSelectedItem("Inactivo");
         }
-
         btnGuardarEmpleado.setEnabled(false);
         btnActualizar.setEnabled(true);
         btnEliminar.setEnabled(true);
@@ -63,7 +59,6 @@ public class FrmEmpleado extends javax.swing.JFrame {
     btnGuardarEmpleado.setEnabled(true);
     btnActualizar.setEnabled(false);
     btnEliminar.setEnabled(false);
-
     mostrarSiguienteIdEmpleado();
     }
     
@@ -81,9 +76,7 @@ public class FrmEmpleado extends javax.swing.JFrame {
         @Override
         public void popupMenuCanceled(javax.swing.event.PopupMenuEvent e) {}
     });
-}
-
-    
+}   
 
    private void mostrarSiguienteIdEmpleado() {
     try (Connection conn = Conexion.getConexion()) {
@@ -94,7 +87,6 @@ public class FrmEmpleado extends javax.swing.JFrame {
                 int siguienteId = rs.getInt("proximo_id");
                 txtIdEmpleado.setText(String.valueOf(siguienteId));
             }
-
         }
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al obtener siguiente ID: " + e.getMessage());
@@ -123,6 +115,79 @@ private void cargarTablaEmpleados() {
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(this, "Error al cargar empleados: " + e.getMessage());
         }
+}
+public void BotonGuardar(){
+    String id = txtIdEmpleado.getText().trim();
+        String nombre = txtNombreEmpleado.getText().trim();
+        String cargo = txtCargo.getText().trim();
+
+        if (nombre.isEmpty() || cargo.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.");
+            return;
+        }
+
+        try (Connection conn = Conexion.getConexion()) {
+            String sql = "INSERT INTO empleados (empleado_id, nombre, cargo) VALUES (?, ?, ?)";
+            try (PreparedStatement ps = conn.prepareStatement(sql)) {
+                ps.setInt(1, Integer.parseInt(id));
+                ps.setString(2, nombre);
+                ps.setString(3, cargo);
+                
+                int resultado = ps.executeUpdate();
+                
+                if (resultado > 0) {
+                    JOptionPane.showMessageDialog(this, "Empleado guardado correctamente.");
+                    cargarTablaEmpleados();
+                    mostrarSiguienteIdEmpleado();
+                    txtNombreEmpleado.setText("");
+                    txtCargo.setText("");
+                } else {
+                    JOptionPane.showMessageDialog(this, "Error al guardar empleado.");
+                }
+            }
+
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al guardar empleado: " + e.getMessage());
+        }
+        FilaSeleccionada(); 
+}
+
+public void BotonActualizar(){
+    String id = txtIdEmpleado.getText().trim();
+    String nombre = txtNombreEmpleado.getText().trim();
+    String cargo = txtCargo.getText().trim();
+    String estadoSeleccionado = cboEstado.getSelectedItem().toString();
+
+    if (id.isEmpty() || nombre.isEmpty() || cargo.isEmpty() || estadoSeleccionado.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.");
+        return;
+    }
+
+    boolean activo = estadoSeleccionado.equalsIgnoreCase("Activo");
+
+    try (Connection conn = Conexion.getConexion()) {
+        String sql = "UPDATE empleados SET nombre = ?, cargo = ?, activo = ? WHERE empleado_id = ?";
+        PreparedStatement ps = conn.prepareStatement(sql);
+        ps.setString(1, nombre);
+        ps.setString(2, cargo);
+        ps.setBoolean(3, activo);
+        ps.setInt(4, Integer.parseInt(id));
+
+        int resultado = ps.executeUpdate();
+
+        if (resultado > 0) {
+            JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
+            cargarTablaEmpleados();
+            mostrarSiguienteIdEmpleado();
+            btnGuardarEmpleado.setEnabled(true);
+            btnActualizar.setEnabled(false);
+            btnEliminar.setEnabled(false);
+        } else {
+            JOptionPane.showMessageDialog(this, "No se encontró el empleado.");
+        }
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al actualizar empleado: " + e.getMessage());
+    }
 }
 public void eliminarEmpleado() {
     int fila = tblEmpleados.getSelectedRow();
@@ -164,9 +229,8 @@ public void eliminarEmpleado() {
     } catch (SQLException e) {
         JOptionPane.showMessageDialog(null, "Error al inactivar empleado: " + e.getMessage());
     }
+    cargarTablaEmpleados();
 }
-
-
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -182,14 +246,14 @@ public void eliminarEmpleado() {
         btnGuardarEmpleado = new javax.swing.JButton();
         btnActualizar = new javax.swing.JButton();
         btnEliminar = new javax.swing.JButton();
-        btnCerrar1 = new javax.swing.JButton();
+        btnCerrar = new javax.swing.JButton();
         jLabel3 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         cboEstado = new javax.swing.JComboBox<>();
         btnNuevo = new javax.swing.JButton();
         btnLimpiar = new javax.swing.JButton();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 formMouseClicked(evt);
@@ -276,11 +340,11 @@ public void eliminarEmpleado() {
             }
         });
 
-        btnCerrar1.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
-        btnCerrar1.setText("CERRAR");
-        btnCerrar1.addActionListener(new java.awt.event.ActionListener() {
+        btnCerrar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
+        btnCerrar.setText("CERRAR");
+        btnCerrar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btnCerrar1ActionPerformed(evt);
+                btnCerrarActionPerformed(evt);
             }
         });
 
@@ -352,7 +416,7 @@ public void eliminarEmpleado() {
                         .addGap(31, 31, 31)
                         .addComponent(btnLimpiar)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(btnCerrar1, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 92, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(50, 50, 50))
                     .addGroup(layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
@@ -396,7 +460,7 @@ public void eliminarEmpleado() {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
                         .addGap(1, 1, 1)
-                        .addComponent(btnCerrar1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(btnCerrar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                         .addComponent(btnGuardarEmpleado, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(btnActualizar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -418,86 +482,21 @@ public void eliminarEmpleado() {
     }//GEN-LAST:event_txtIdEmpleadoActionPerformed
 
     private void btnGuardarEmpleadoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarEmpleadoActionPerformed
-        String id = txtIdEmpleado.getText().trim();
-        String nombre = txtNombreEmpleado.getText().trim();
-        String cargo = txtCargo.getText().trim();
-
-        if (nombre.isEmpty() || cargo.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.");
-            return;
-        }
-
-        try (Connection conn = Conexion.getConexion()) {
-            String sql = "INSERT INTO empleados (empleado_id, nombre, cargo) VALUES (?, ?, ?)";
-            try (PreparedStatement ps = conn.prepareStatement(sql)) {
-                ps.setInt(1, Integer.parseInt(id));
-                ps.setString(2, nombre);
-                ps.setString(3, cargo);
-                
-                int resultado = ps.executeUpdate();
-                
-                if (resultado > 0) {
-                    JOptionPane.showMessageDialog(this, "Empleado guardado correctamente.");
-                    cargarTablaEmpleados();
-                    mostrarSiguienteIdEmpleado();
-                    txtNombreEmpleado.setText("");
-                    txtCargo.setText("");
-                } else {
-                    JOptionPane.showMessageDialog(this, "Error al guardar empleado.");
-                }
-            }
-
-        } catch (SQLException e) {
-            JOptionPane.showMessageDialog(this, "Error al guardar empleado: " + e.getMessage());
-        }
+        BotonGuardar();
     }//GEN-LAST:event_btnGuardarEmpleadoActionPerformed
 
     private void btnActualizarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnActualizarActionPerformed
-        String id = txtIdEmpleado.getText().trim();
-    String nombre = txtNombreEmpleado.getText().trim();
-    String cargo = txtCargo.getText().trim();
-    String estadoSeleccionado = cboEstado.getSelectedItem().toString();
-
-    if (id.isEmpty() || nombre.isEmpty() || cargo.isEmpty() || estadoSeleccionado.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Por favor complete todos los campos.");
-        return;
-    }
-
-    boolean activo = estadoSeleccionado.equalsIgnoreCase("Activo");
-
-    try (Connection conn = Conexion.getConexion()) {
-        String sql = "UPDATE empleados SET nombre = ?, cargo = ?, activo = ? WHERE empleado_id = ?";
-        PreparedStatement ps = conn.prepareStatement(sql);
-        ps.setString(1, nombre);
-        ps.setString(2, cargo);
-        ps.setBoolean(3, activo);
-        ps.setInt(4, Integer.parseInt(id));
-
-        int resultado = ps.executeUpdate();
-
-        if (resultado > 0) {
-            JOptionPane.showMessageDialog(this, "Empleado actualizado correctamente.");
-            cargarTablaEmpleados();
-           // limpiarCampos();
-            mostrarSiguienteIdEmpleado();
-            btnGuardarEmpleado.setEnabled(true);
-            btnActualizar.setEnabled(false);
-            btnEliminar.setEnabled(false);
-        } else {
-            JOptionPane.showMessageDialog(this, "No se encontró el empleado.");
-        }
-    } catch (SQLException e) {
-        JOptionPane.showMessageDialog(this, "Error al actualizar empleado: " + e.getMessage());
-    }
+        BotonActualizar();
     }//GEN-LAST:event_btnActualizarActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
         eliminarEmpleado();
+        FilaSeleccionada(); 
     }//GEN-LAST:event_btnEliminarActionPerformed
 
-    private void btnCerrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrar1ActionPerformed
+    private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
         dispose();
-    }//GEN-LAST:event_btnCerrar1ActionPerformed
+    }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void txtCargoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtCargoActionPerformed
         // TODO add your handling code here:
@@ -508,7 +507,7 @@ public void eliminarEmpleado() {
     }//GEN-LAST:event_cboEstadoActionPerformed
 
     private void tblEmpleadosMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblEmpleadosMouseClicked
-        // TODO add your handling code here:
+        FilaSeleccionada();
     }//GEN-LAST:event_tblEmpleadosMouseClicked
 
     private void cboEstadoPopupMenuCanceled(javax.swing.event.PopupMenuEvent evt) {//GEN-FIRST:event_cboEstadoPopupMenuCanceled
@@ -527,34 +526,11 @@ public void eliminarEmpleado() {
         FilaSeleccionada(); 
     }//GEN-LAST:event_formMouseClicked
 
-    /**
-     * @param args the command line arguments
-     */
-    public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ReflectiveOperationException | javax.swing.UnsupportedLookAndFeelException ex) {
-            logger.log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(() -> new FrmEmpleado().setVisible(true));
-    }
+    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton btnActualizar;
-    private javax.swing.JButton btnCerrar1;
+    private javax.swing.JButton btnCerrar;
     private javax.swing.JButton btnEliminar;
     private javax.swing.JButton btnGuardarEmpleado;
     private javax.swing.JButton btnLimpiar;
