@@ -1,54 +1,100 @@
-
 package sistemacine.modelo;
-
 import java.sql.Date;
 import java.sql.Time;
-import java.time.LocalDate;
-
 public class Funcion {
-    private int id;
+    private int funcion_id;
+    private int peliculaId;    
     private String pelicula;
     private Date fecha;
     private Time hora;
     private String sala;
+    private int salaId;
     private String promociones;
+    private int promocion_id;
+
 
     public Funcion() {}
 
-    public Funcion(int id, String pelicula, Date fecha, Time hora, String sala, String promociones) {
-        this.id = id;
+    public Funcion(int funcion_id, int peliculaId, String pelicula, Date fecha, Time hora, String sala, int salaId, String promociones, int promocion_Id) {
+        this.funcion_id = funcion_id;
+        this.peliculaId = peliculaId;
         this.pelicula = pelicula;
         this.fecha = fecha;
         this.hora = hora;
         this.sala = sala;
-        this.promociones = promociones;        
+        this.salaId = salaId;
+        this.promociones = promociones; 
+        this.promocion_id = promocion_id;
     }
 
-    public int getId() { return id; }
-    public void setId(int id) { this.id = id; }
-
-    public String getpelicula() { return pelicula; }
-    public void setpelicula(String pelicula) { this.pelicula = pelicula; }
-
-    public Date getfecha() { return fecha; }
-    public void setfecha(Date fecha) { this.fecha = fecha; }
-
-    public Time gethora() { return hora; }
-    public void sethora(Time hora) { this.hora = hora; }
-
-    public String getsala() { return sala; }
-    public void setsala(String sala) { this.sala = sala; }
-    
-    public String getpromociones() { return promociones; }
-    public void setpromociones(String promociones) { this.promociones = promociones; }   
-
-    public void setFecha(LocalDate fecha) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public void setPromocion_id(int promocion_id) {
+        this.promocion_id = promocion_id;
     }
 
-    public void setHora(Time horaSQL) {
-        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    public int getPromocion_id() {
+        return promocion_id;
     }
-    
+
+    public int getPeliculaId() {
+        return peliculaId;
+    }
+    public void setPeliculaId(int peliculaId) {
+        this.peliculaId = peliculaId;
+    }
+
+    public int getSalaId() {
+        return salaId;
+    }
+    public void setSalaId(int salaId) {
+        this.salaId = salaId;
+    }
+
+    public int getfuncion_Id() {
+        return funcion_id;
+    }
+
+    public void setfuncion_Id(int id) {
+        this.funcion_id = id;
+    }
+
+    public String getPelicula() {
+        return pelicula;
+    }
+
+    public void setPelicula(String pelicula) {
+        this.pelicula = pelicula;
+    }
+
+    public Date getFecha() {
+        return fecha;
+    }
+
+    public void setFecha(Date fecha) {
+        this.fecha = fecha;
+    }
+
+    public Time getHora() {
+        return hora;
+    }
+
+    public void setHora(Time hora) {
+        this.hora = hora;
+    }
+
+    public String getSala() {
+        return sala;
+    }
+
+    public void setSala(String sala) {
+        this.sala = sala;
+    }
+
+    public String getPromociones() {
+        return promociones;
+    }
+
+    public void setPromociones(String promociones) {
+        this.promociones = promociones;
+    }
+ 
 }
-

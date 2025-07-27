@@ -51,7 +51,7 @@ public class PeliculasDAO {
             if (filas > 0) {
                 try (ResultSet rs = ps.getGeneratedKeys()) {
                     if (rs.next()) {
-                        p.setId(rs.getInt(1));  // Actualiza el id en el objeto
+                        p.setId(rs.getInt(1)); 
                     }
                 }
                 return true;

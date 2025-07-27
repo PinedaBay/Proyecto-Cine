@@ -1,30 +1,131 @@
 
 package sistemacine.vista;
 
+import java.awt.HeadlessException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
-import java.time.LocalDate;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import sistemacine.controlador.FuncionesController;
 import sistemacine.modelo.Conexion;
 import sistemacine.modelo.Funcion;
 import sistemacine.modelo.FuncionesDAO;
 
 public final class FrmFunciones extends javax.swing.JInternalFrame{
     
-    private final FuncionesController controlador;
     public FrmFunciones() {
-         initComponents();
-         limpiarCampos();
-         cargarSiguienteId();
-         FuncionesDAO modelo = new FuncionesDAO();
-         controlador = new FuncionesController(this, modelo);
+    initComponents();
+    limpiarCampos();
+    cargarPeliculas();
+    cargarSalas();
+    cargarPromociones();
+    cargarTablaFunciones();
+    mostrarSiguienteId();
+    inicializarFechaYHora();         
+    mostrarSiguienteId(); 
+}
+private void seleccionarFuncionDeTabla() {
+    int fila = TablaFunciones.getSelectedRow();
+    if (fila >= 0) {
+        txtIdFunciones.setText(TablaFunciones.getValueAt(fila, 0).toString());
+
+        String fechaCompleta = TablaFunciones.getValueAt(fila, 2).toString();
+        String[] partesFecha = fechaCompleta.split("-");
+        cboAnio.setSelectedItem(partesFecha[0]);
+        cboMes.setSelectedItem(partesFecha[1]);
+        cboDia.setSelectedItem(partesFecha[2]);
+
+        String horaCompleta = TablaFunciones.getValueAt(fila, 3).toString();
+        String[] partesHora = horaCompleta.split(":");
+        cboHora.setSelectedItem(partesHora[0]);
+        cboMinuto.setSelectedItem(partesHora[1]);
+        cboSegundo.setSelectedItem(partesHora[2]);
+
+        String pelicula = TablaFunciones.getValueAt(fila, 1).toString();
+        for (int i = 0; i < cboPelicula.getItemCount(); i++) {
+            if (cboPelicula.getItemAt(i).contains(pelicula)) {
+                cboPelicula.setSelectedIndex(i);
+                break;
+            }
+        }
+
+        String sala = TablaFunciones.getValueAt(fila, 4).toString();
+        for (int i = 0; i < cboSala.getItemCount(); i++) {
+            if (cboSala.getItemAt(i).contains(sala)) {
+                cboSala.setSelectedIndex(i);
+                break;
+            }
+        }
+
+        String promo = TablaFunciones.getValueAt(fila, 5).toString();
+        for (int i = 0; i < cboPromociones.getItemCount(); i++) {
+            if (cboPromociones.getItemAt(i).contains(promo)) {
+                cboPromociones.setSelectedIndex(i);
+                break;
+            }
+        }
+
+        btnGuardar.setEnabled(false);
     }
-  private void cargarPeliculas() {
+}
+    
+   private void inicializarFechaYHora() {
+    cboAnio.removeAllItems();
+    cboAnio.addItem("");
+    for (int i = 2024; i <= 2030; i++) {
+        cboAnio.addItem(String.valueOf(i));
+    }
+
+    cboMes.removeAllItems();
+    cboMes.addItem("");
+    for (int i = 1; i <= 12; i++) {
+        cboMes.addItem(String.format("%02d", i));
+    }
+
+    cboDia.removeAllItems();
+    cboDia.addItem("");
+    for (int i = 1; i <= 31; i++) {
+        cboDia.addItem(String.format("%02d", i));
+    }
+
+    cboHora.removeAllItems();
+    cboHora.addItem("");
+    for (int i = 0; i <= 23; i++) {
+        cboHora.addItem(String.format("%02d", i));
+    }
+
+    cboMinuto.removeAllItems();
+    cboMinuto.addItem("");
+    for (int i = 0; i <= 59; i++) {
+        cboMinuto.addItem(String.format("%02d", i));
+    }
+
+    cboSegundo.removeAllItems();
+    cboSegundo.addItem("");
+    for (int i = 0; i <= 59; i++) {
+        cboSegundo.addItem(String.format("%02d", i));
+    }
+}
+ 
+   public void mostrarSiguienteId() {
+    String sql = "SELECT COALESCE(MAX(funcion_id), 0) + 1 AS siguienteId FROM funciones";
+
+    try (Connection conn = Conexion.getConexion();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        if (rs.next()) {
+            int siguienteId = rs.getInt("siguienteId");
+            txtIdFunciones.setText(String.valueOf(siguienteId));
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al obtener el siguiente ID: " + e.getMessage());
+    }
+}
+
+   private void cargarPeliculas() {
     cboPelicula.removeAllItems();
     String sql = "SELECT pelicula_id, titulo FROM peliculas";
     try (Connection conn = Conexion.getConexion();
@@ -39,6 +140,7 @@ public final class FrmFunciones extends javax.swing.JInternalFrame{
         JOptionPane.showMessageDialog(this, "Error cargando películas: " + e.getMessage());
     }
 }
+
 private void cargarSalas() {
     cboSala.removeAllItems();
     String sql = "SELECT sala_id, nombre FROM salas";
@@ -55,83 +157,6 @@ private void cargarSalas() {
     }
 }
 
-
-private void cargarSiguienteId() {
-    FuncionesDAO id = new FuncionesDAO();
-    try {
-        int siguienteId = id.obtenerSiguienteId();
-        txtIdFunciones.setText(String.valueOf(siguienteId));
-    } catch (SQLException ex) {
-        JOptionPane.showMessageDialog(this, "Error al obtener ID: " + ex.getMessage());
-    }
-}
-private void cargarDatosDeFilaSeleccionada() {
-    int fila = TablaFunciones.getSelectedRow();
-    if (fila >= 0) {
-        txtIdFunciones.setText(TablaFunciones.getValueAt(fila, 0).toString()); 
-        cboPelicula.setSelectedItem(TablaFunciones.getValueAt(fila, 1).toString());     
-         String fechaCompleta = TablaFunciones.getValueAt(fila, 2).toString();
-        String[] partesFecha = fechaCompleta.split("-");
-        if (partesFecha.length == 3) {
-            cboAnio.setSelectedItem(partesFecha[0]);
-            cboMes.setSelectedItem(partesFecha[1]);
-            cboDia.setSelectedItem(partesFecha[2]);
-        }
-        String horaCompleta = TablaFunciones.getValueAt(fila, 3).toString();
-        String[] partesHora = horaCompleta.split(":");
-        if (partesHora.length == 3) {
-            cboHora.setSelectedItem(partesHora[0]);
-            cboMinuto.setSelectedItem(partesHora[1]);
-            cboSegundo.setSelectedItem(partesHora[2]);
-        }          
-        cboSala.setSelectedItem(TablaFunciones.getValueAt(fila, 4).toString());
-        cboPromociones.setSelectedItem(TablaFunciones.getValueAt(fila, 5).toString()); 
-        btnGuardar.setEnabled(false);
-        btnEditar.setEnabled(true);
-        btnEliminar.setEnabled(true);
-        txtIdFunciones.setEditable(false);
-    }
-}
-
-
-public Funcion getFuncionDesdeFormulario() {
-    Funcion f = new Funcion();
-    if (!txtIdFunciones.getText().isEmpty()) {
-        f.setId(Integer.parseInt(txtIdFunciones.getText()));
-    }
-    f.setpelicula(cboPelicula.getSelectedItem().toString());
-
-    int anio = Integer.parseInt(cboAnio.getSelectedItem().toString());
-    int mes = Integer.parseInt(cboMes.getSelectedItem().toString());
-    int dia = Integer.parseInt(cboDia.getSelectedItem().toString());
-    LocalDate fecha = LocalDate.of(anio, mes, dia);
-    f.setFecha(fecha); 
-    
-    String hora = cboHora.getSelectedItem().toString();
-    String minuto = cboMinuto.getSelectedItem().toString();
-    String segundo = cboSegundo.getSelectedItem().toString();
-    if (hora.length() == 1) hora = "0" + hora;
-    if (minuto.length() == 1) minuto = "0" + minuto;
-    if (segundo.length() == 1) segundo = "0" + segundo;
-    String horaCompleta = hora + ":" + minuto + ":" + segundo;
-    java.sql.Time horaSQL = java.sql.Time.valueOf(horaCompleta);
-    f.setHora(horaSQL);    
-
-    f.setsala(cboSala.getSelectedItem().toString());
-    f.setpromociones(cboPromociones.getSelectedItem().toString());
-    return f;
-}
-
-
-public void llenarTabla(List<Funcion> Funciones) {
-    DefaultTableModel modelo = (DefaultTableModel) TablaFunciones.getModel();
-    modelo.setRowCount(0); 
-    for (Funcion f : Funciones) {
-        modelo.addRow(new Object[] {
-            f.getId(), f.getpelicula(), f.getfecha(), f.gethora(), f.getsala(), f.getpromociones()
-        });
-    }
-}
 private void cargarPromociones() {
     cboPromociones.removeAllItems();
     String sql = "SELECT promocion_id, descripcion FROM promociones";
@@ -148,19 +173,185 @@ private void cargarPromociones() {
         JOptionPane.showMessageDialog(this, "Error cargando promociones: " + e.getMessage());
     }
 }
+   
+ private void cargarTablaFunciones() {
+    DefaultTableModel modeloTabla = (DefaultTableModel) TablaFunciones.getModel();
+    modeloTabla.setRowCount(0); 
 
-public void limpiarCampos() {
+    String sql = """
+        SELECT f.funcion_id,
+               p.titulo AS pelicula,
+               f.fecha,
+               f.hora,
+               s.nombre AS sala,
+               pr.descripcion AS promocion
+        FROM funciones f
+        JOIN peliculas p ON f.pelicula_id = p.pelicula_id
+        JOIN salas s ON f.sala_id = s.sala_id
+        LEFT JOIN promociones pr ON f.promocion_id = pr.promocion_id
+    """;
+
+    try (Connection conn = Conexion.getConexion();
+         PreparedStatement ps = conn.prepareStatement(sql);
+         ResultSet rs = ps.executeQuery()) {
+
+        while (rs.next()) {
+            modeloTabla.addRow(new Object[]{
+                rs.getInt("funcion_id"),
+                rs.getString("pelicula"),
+                rs.getDate("fecha"),
+                rs.getTime("hora"),
+                rs.getString("sala"),
+                rs.getString("promocion") != null ? rs.getString("promocion") : "Sin promoción"
+            });
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Error al cargar funciones: " + e.getMessage());
+    }
+}
+ 
+private void guardarFuncion() {
+    try {
+        String fecha = cboAnio.getSelectedItem() + "-" +
+                       cboMes.getSelectedItem() + "-" +
+                       cboDia.getSelectedItem();
+
+        String hora = cboHora.getSelectedItem() + ":" +
+                      cboMinuto.getSelectedItem() + ":" +
+                      cboSegundo.getSelectedItem();
+
+        int peliculaId = Integer.parseInt(cboPelicula.getSelectedItem().toString().split(" - ")[0]);
+        int salaId = Integer.parseInt(cboSala.getSelectedItem().toString().split(" - ")[0]);
+        int promocionId = Integer.parseInt(cboPromociones.getSelectedItem().toString().split(" - ")[0]);
+        Integer promocionIdFinal = (promocionId == 0) ? null : promocionId;
+
+        String sql = "INSERT INTO funciones (pelicula_id, sala_id, fecha, hora, promocion_id) VALUES (?, ?, ?, ?, ?)";
+
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, peliculaId);
+            ps.setInt(2, salaId);
+            ps.setDate(3, java.sql.Date.valueOf(fecha));
+            ps.setTime(4, java.sql.Time.valueOf(hora));
+
+            if (promocionIdFinal == null) {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(5, promocionIdFinal);
+            }
+
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                JOptionPane.showMessageDialog(this, "Función guardada exitosamente.");
+                cargarTablaFunciones();
+                limpiarCampos();
+                mostrarSiguienteId();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo guardar la función.");
+            }
+        }
+    } catch (HeadlessException | NumberFormatException | SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al guardar la función: " + e.getMessage());
+    }
+    
+}
+
+
+private void limpiarCampos() {
     txtIdFunciones.setText("");      
     cboSala.setSelectedIndex(0);
     cboPelicula.setSelectedIndex(0);
     cboPromociones.setSelectedIndex(0);
 }
 
-public void mostrarMensaje(String mensaje) {
-    JOptionPane.showMessageDialog(this, mensaje);
-}
- 
+private void editarFuncion() {
+    try {
+        int funcionId = Integer.parseInt(txtIdFunciones.getText().trim());
 
+        String fecha = cboAnio.getSelectedItem().toString() + "-" +
+                       cboMes.getSelectedItem().toString() + "-" +
+                       cboDia.getSelectedItem().toString();
+
+        String hora = cboHora.getSelectedItem().toString() + ":" +
+                      cboMinuto.getSelectedItem().toString() + ":" +
+                      cboSegundo.getSelectedItem().toString();
+
+        int peliculaId = Integer.parseInt(cboPelicula.getSelectedItem().toString().split(" - ")[0]);
+        int salaId = Integer.parseInt(cboSala.getSelectedItem().toString().split(" - ")[0]);
+        int promocionId = Integer.parseInt(cboPromociones.getSelectedItem().toString().split(" - ")[0]);
+
+        Integer promocionIdFinal = (promocionId == 0) ? null : promocionId;
+
+        String sql = "UPDATE funciones SET pelicula_id = ?, sala_id = ?, fecha = ?, hora = ?, promocion_id = ? WHERE funcion_id = ?";
+
+        try (Connection conn = Conexion.getConexion();
+             PreparedStatement ps = conn.prepareStatement(sql)) {
+
+            ps.setInt(1, peliculaId);
+            ps.setInt(2, salaId);
+            ps.setDate(3, java.sql.Date.valueOf(fecha));
+            ps.setTime(4, java.sql.Time.valueOf(hora));
+
+            if (promocionIdFinal == null) {
+                ps.setNull(5, java.sql.Types.INTEGER);
+            } else {
+                ps.setInt(5, promocionIdFinal);
+            }
+
+            ps.setInt(6, funcionId);
+
+            int filasAfectadas = ps.executeUpdate();
+            if (filasAfectadas > 0) {
+                JOptionPane.showMessageDialog(this, "Función actualizada correctamente.");
+                cargarTablaFunciones();
+                limpiarCampos();
+                mostrarSiguienteId();
+            } else {
+                JOptionPane.showMessageDialog(this, "No se pudo actualizar la función.");
+            }
+        }
+    } catch (HeadlessException | NumberFormatException | SQLException e) {
+        JOptionPane.showMessageDialog(this, "Error al actualizar la función: " + e.getMessage());
+    }
+}
+private void eliminarFuncion() {
+    int filaSeleccionada = TablaFunciones.getSelectedRow();
+    
+    if (filaSeleccionada == -1) {
+        JOptionPane.showMessageDialog(this, "Seleccione una función de la tabla para eliminar.");
+        return;
+    }
+
+    int confirmacion = JOptionPane.showConfirmDialog(this, "¿Está seguro de eliminar esta función?", "Confirmar eliminación", JOptionPane.YES_NO_OPTION);
+    
+    if (confirmacion == JOptionPane.YES_OPTION) {
+        try {
+            int funcionId = Integer.parseInt(TablaFunciones.getValueAt(filaSeleccionada, 0).toString());
+
+            String sql = "DELETE FROM funciones WHERE funcion_id = ?";
+
+            try (Connection conn = Conexion.getConexion();
+                 PreparedStatement ps = conn.prepareStatement(sql)) {
+
+                ps.setInt(1, funcionId);
+
+                int filasAfectadas = ps.executeUpdate();
+                if (filasAfectadas > 0) {
+                    JOptionPane.showMessageDialog(this, "Función eliminada correctamente.");
+                    cargarTablaFunciones();
+                    limpiarCampos();
+                    mostrarSiguienteId();
+                } else {
+                    JOptionPane.showMessageDialog(this, "No se pudo eliminar la función.");
+                }
+            }
+        } catch (HeadlessException | NumberFormatException | SQLException e) {
+            JOptionPane.showMessageDialog(this, "Error al eliminar la función: " + e.getMessage());
+        }
+    }
+}
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
@@ -458,7 +649,7 @@ public void mostrarMensaje(String mensaje) {
     }//GEN-LAST:event_txtIdFuncionesActionPerformed
 
     private void btnGuardarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnGuardarActionPerformed
-            controlador.guardarFunciones();
+         guardarFuncion();
     }//GEN-LAST:event_btnGuardarActionPerformed
 
     private void btnCerrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnCerrarActionPerformed
@@ -466,7 +657,7 @@ public void mostrarMensaje(String mensaje) {
     }//GEN-LAST:event_btnCerrarActionPerformed
 
     private void btnEditarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEditarActionPerformed
-            controlador.actualizarFunciones();
+        editarFuncion();
     }//GEN-LAST:event_btnEditarActionPerformed
 
     private void btnLimpiarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnLimpiarActionPerformed
@@ -474,36 +665,26 @@ public void mostrarMensaje(String mensaje) {
     }//GEN-LAST:event_btnLimpiarActionPerformed
 
     private void btnNuevoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnNuevoActionPerformed
+            limpiarCampos();
+            mostrarSiguienteId(); 
             btnGuardar.setEnabled(true); 
-            FuncionesDAO id = new FuncionesDAO();
-            try {
-            int siguienteId = id.obtenerSiguienteId();
-            txtIdFunciones.setText(String.valueOf(siguienteId));
-            } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(this, "Error al obtener ID: " + ex.getMessage());
-            }
+            TablaFunciones.clearSelection();
     }//GEN-LAST:event_btnNuevoActionPerformed
 
     private void btnEliminarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEliminarActionPerformed
-            int fila = TablaFunciones.getSelectedRow();
-            if (fila == -1) {
-            mostrarMensaje("Seleccione una funcion para eliminar.");
-            return;
-             }
-            int id = Integer.parseInt(TablaFunciones.getValueAt(fila, 0).toString());
-            controlador.eliminarFunciones(id);
+            eliminarFuncion();
     }//GEN-LAST:event_btnEliminarActionPerformed
 
     private void cboPeliculaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboPeliculaActionPerformed
-            cargarPeliculas();
+            //cargarPeliculas();
     }//GEN-LAST:event_cboPeliculaActionPerformed
 
     private void cboPromocionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboPromocionesActionPerformed
-        cargarPromociones();
+       // cargarPromociones();
     }//GEN-LAST:event_cboPromocionesActionPerformed
 
     private void cboSalaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboSalaActionPerformed
-        cargarSalas();
+      //  cargarSalas();
     }//GEN-LAST:event_cboSalaActionPerformed
 
     private void cboAnioActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cboAnioActionPerformed
@@ -531,7 +712,7 @@ public void mostrarMensaje(String mensaje) {
     }//GEN-LAST:event_cboSegundoActionPerformed
 
     private void TablaFuncionesMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_TablaFuncionesMouseClicked
-       
+        seleccionarFuncionDeTabla();
     }//GEN-LAST:event_TablaFuncionesMouseClicked
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
@@ -561,5 +742,14 @@ public void mostrarMensaje(String mensaje) {
     private javax.swing.JLabel lblSala1;
     private javax.swing.JTextField txtIdFunciones;
     // End of variables declaration//GEN-END:variables
+
+    public Funcion getFuncionesDesdeFormulario() {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
+    public void llenarTabla(List<Funcion> funciones) {
+        throw new UnsupportedOperationException("Not supported yet."); // Generated from nbfs://nbhost/SystemFileSystem/Templates/Classes/Code/GeneratedMethodBody
+    }
+
 
 }
