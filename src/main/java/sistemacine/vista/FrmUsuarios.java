@@ -85,16 +85,17 @@ private void cargarEmpleados() {
 
 private void BotonGuardar(){
     Connection con = null;
-        try {
-            con = Conexion.getConexion();
-        } catch (SQLException ex) {
-            System.getLogger(FrmUsuarios.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
-        }
+    try {
+        con = Conexion.getConexion();
+    } catch (SQLException ex) {
+        System.getLogger(FrmUsuarios.class.getName()).log(System.Logger.Level.ERROR, (String) null, ex);
+    }
 
     try {
         String usuario = txtUsuario.getText().trim();
         String contrasena = new String(txtContrasenia.getPassword()).trim();
         String rolIdText = txtIdRol.getText().trim();
+
         if (usuario.isEmpty() || contrasena.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El campo usuario y contraseña no pueden estar vacíos.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
@@ -103,22 +104,20 @@ private void BotonGuardar(){
             JOptionPane.showMessageDialog(this, "La contraseña debe tener al menos 6 caracteres.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         if (!usuario.matches("[a-zA-Z0-9_]+")) {
             JOptionPane.showMessageDialog(this, "El nombre de usuario solo puede contener letras, números y guiones bajos.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
-
         if (cboEmpleados.getSelectedIndex() == -1) {
             JOptionPane.showMessageDialog(this, "Debe seleccionar un empleado.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
-
         if (rolIdText.isEmpty()) {
             JOptionPane.showMessageDialog(this, "El empleado seleccionado no tiene un rol asignado.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
 
+        // Validar si usuario ya existe
         String sqlCheckUsuario = "SELECT COUNT(*) FROM usuarios WHERE NombreUsuario = ?";
         PreparedStatement psCheckUsuario = con.prepareStatement(sqlCheckUsuario);
         psCheckUsuario.setString(1, usuario);
@@ -127,12 +126,16 @@ private void BotonGuardar(){
             JOptionPane.showMessageDialog(this, "El nombre de usuario ya existe. Por favor elige otro.", "Advertencia", JOptionPane.WARNING_MESSAGE);
             return;
         }
+
+        // Obtener ID del empleado seleccionado
         String empleadoSeleccionado = (String) cboEmpleados.getSelectedItem();
         int idEmpleado = empleadoMap.getOrDefault(empleadoSeleccionado, -1);
         if (idEmpleado == -1) {
             JOptionPane.showMessageDialog(this, "Error al obtener el ID del empleado seleccionado.", "Error", JOptionPane.ERROR_MESSAGE);
             return;
         }
+
+        // Validar si el empleado ya tiene usuario
         String sqlCheckEmpleado = "SELECT COUNT(*) FROM usuarios WHERE empleado_id = ?";
         PreparedStatement psCheckEmpleado = con.prepareStatement(sqlCheckEmpleado);
         psCheckEmpleado.setInt(1, idEmpleado);
@@ -142,31 +145,25 @@ private void BotonGuardar(){
             return;
         }
 
-        // 🔐 Encriptar la contraseña (SHA-256)
-        MessageDigest md = MessageDigest.getInstance("SHA-256");
-        byte[] hash = md.digest(contrasena.getBytes("UTF-8"));
-        StringBuilder sb = new StringBuilder();
-        for (byte b : hash) {
-            sb.append(String.format("%02x", b));
-        }
-        String contrasenaEncriptada = sb.toString();
+        // Encriptar contraseña (SHA-256)
+        String contrasenaEncriptada = encriptarSHA256(contrasena);
 
-        // ✅ Insertar usuario
-        String sqlInsertUsuario = "INSERT INTO usuarios (NombreUsuario, Contraseña, empleado_id) VALUES (?, ?, ?)";
+        // Insertar usuario (usando nombre correcto de columna: Contrasenia)
+        String sqlInsertUsuario = "INSERT INTO usuarios (NombreUsuario, Contrasenia, empleado_id) VALUES (?, ?, ?)";
         PreparedStatement psInsertUsuario = con.prepareStatement(sqlInsertUsuario, Statement.RETURN_GENERATED_KEYS);
         psInsertUsuario.setString(1, usuario);
         psInsertUsuario.setString(2, contrasenaEncriptada);
         psInsertUsuario.setInt(3, idEmpleado);
         psInsertUsuario.executeUpdate();
 
-        // Obtener ID generado del usuario
+        // Obtener ID generado
         ResultSet rsKeys = psInsertUsuario.getGeneratedKeys();
         int usuarioId = -1;
         if (rsKeys.next()) {
             usuarioId = rsKeys.getInt(1);
         }
 
-        // Insertar en tabla usuarios_roles
+        // Insertar rol
         int rolId = Integer.parseInt(txtIdRol.getText().trim());
         String sqlInsertRol = "INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES (?, ?)";
         PreparedStatement psInsertRol = con.prepareStatement(sqlInsertRol);
@@ -178,9 +175,10 @@ private void BotonGuardar(){
         limpiarCampos();
         cargarEmpleados();
 
-    } catch (SQLException | HeadlessException | NumberFormatException | NoSuchAlgorithmException | UnsupportedEncodingException e) {
+    } catch (SQLException | HeadlessException | NumberFormatException e) {
         JOptionPane.showMessageDialog(this, "Error al guardar el usuario: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
+     cargarTablaUsuarios();
 }
 
        
@@ -207,6 +205,7 @@ private void BotonEliminar() {
             JOptionPane.showMessageDialog(this, "Error al eliminar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
         }
     }
+     cargarTablaUsuarios();
 }
 
 private void BotonActualizar() {
@@ -261,6 +260,7 @@ private void BotonActualizar() {
     } catch (HeadlessException | NumberFormatException | SQLException e) {
         JOptionPane.showMessageDialog(this, "Error al actualizar: " + e.getMessage(), "Error", JOptionPane.ERROR_MESSAGE);
     }
+     cargarTablaUsuarios();
 }
 private void limpiarCampos() {
         txtUsuario.setText("");
@@ -345,33 +345,27 @@ private void FilaSeleccionada() {
         txtRoles = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
-        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("GESTION DE USUARIOS");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 10, 195, -1));
 
         lblUsuarios.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblUsuarios.setText("USUARIO");
-        getContentPane().add(lblUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 93, -1));
 
         lblContrasenia.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblContrasenia.setText("CONTRASEÑA");
-        getContentPane().add(lblContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 93, 10));
 
         txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsuarioActionPerformed(evt);
             }
         });
-        getContentPane().add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 182, -1));
 
         txtContrasenia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtContraseniaActionPerformed(evt);
             }
         });
-        getContentPane().add(txtContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 320, 182, 20));
 
         tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -391,15 +385,11 @@ private void FilaSeleccionada() {
         });
         jScrollPane1.setViewportView(tblUsuarios);
 
-        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 90, 850, 490));
-
         lblRoles.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblRoles.setText("ROLES");
-        getContentPane().add(lblRoles, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 550, 93, -1));
 
         btnNuevo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnNuevo.setText("NUEVO");
-        getContentPane().add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 670, 100, -1));
 
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGuardar.setText("GUARDAR");
@@ -408,7 +398,6 @@ private void FilaSeleccionada() {
                 btnGuardarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 670, -1, -1));
 
         btnActualizar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnActualizar.setText("ACTUALIZAR");
@@ -417,7 +406,6 @@ private void FilaSeleccionada() {
                 btnActualizarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 670, -1, -1));
 
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminar.setText("ELIMINAR");
@@ -426,7 +414,6 @@ private void FilaSeleccionada() {
                 btnEliminarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 670, 105, -1));
 
         btnCerrar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnCerrar.setText("CERRAR");
@@ -435,36 +422,122 @@ private void FilaSeleccionada() {
                 btnCerrarActionPerformed(evt);
             }
         });
-        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 670, 95, -1));
 
         lblEmpleados.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblEmpleados.setText("EMPLEADO");
-        getContentPane().add(lblEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 93, -1));
 
         cboEmpleados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboEmpleadosActionPerformed(evt);
             }
         });
-        getContentPane().add(cboEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, 182, -1));
 
         lblIdRol.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblIdRol.setText("ID ROL");
-        getContentPane().add(lblIdRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, 93, -1));
 
         txtIdRol.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdRolActionPerformed(evt);
             }
         });
-        getContentPane().add(txtIdRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 430, 182, -1));
 
         txtRoles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtRolesActionPerformed(evt);
             }
         });
-        getContentPane().add(txtRoles, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 550, 182, -1));
+
+        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
+        getContentPane().setLayout(layout);
+        layout.setHorizontalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(680, 680, 680)
+                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(150, 150, 150)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(cboEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblUsuarios, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(lblContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(7, 7, 7)
+                        .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblIdRol, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblRoles, javax.swing.GroupLayout.PREFERRED_SIZE, 93, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(90, 90, 90)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(txtIdRol, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(txtRoles, javax.swing.GroupLayout.PREFERRED_SIZE, 182, javax.swing.GroupLayout.PREFERRED_SIZE))))))
+                .addGap(168, 168, 168)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 850, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(480, 480, 480)
+                .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(btnGuardar)
+                .addGap(20, 20, 20)
+                .addComponent(btnActualizar)
+                .addGap(23, 23, 23)
+                .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(15, 15, 15)
+                .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+        );
+        layout.setVerticalGroup(
+            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(10, 10, 10)
+                .addComponent(jLabel1)
+                .addGap(63, 63, 63)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(10, 10, 10)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblEmpleados)
+                            .addComponent(cboEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(78, 78, 78)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(10, 10, 10)
+                                .addComponent(lblUsuarios))
+                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(95, 95, 95)
+                                .addComponent(lblContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, 10, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGap(90, 90, 90)))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblIdRol)
+                            .addComponent(txtIdRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addGap(98, 98, 98)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtRoles, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lblRoles))
+                        .addGap(8, 8, 8))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 490, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(90, 90, 90)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(btnNuevo)
+                    .addComponent(btnGuardar)
+                    .addComponent(btnActualizar)
+                    .addComponent(btnEliminar)
+                    .addComponent(btnCerrar))
+                .addGap(51, 51, 51))
+        );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

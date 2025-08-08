@@ -40,29 +40,17 @@ public class FrmPrincipal extends javax.swing.JFrame {
                             menuVentas.setVisible(true);}                          
       default -> JOptionPane.showMessageDialog(this, "Rol desconocido: " + rol);
     }
-    }    
-//private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
-    //for (JInternalFrame frame : pnlPrincipal.getAllFrames()) {
-   //     frame.dispose(); 
-   // }
-  //  pnlPrincipal.add(nuevoFormulario);
-  //  nuevoFormulario.setVisible(true);
-  //  int x = (pnlPrincipal.getWidth() - nuevoFormulario.getWidth())/2;
-  //  int y = (pnlPrincipal.getHeight() - nuevoFormulario.getHeight())/2;
-  //  nuevoFormulario.setLocation(x, y);
-//}
+    } 
 private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
     for (JInternalFrame frame : pnlPrincipal.getAllFrames()) {
         frame.dispose(); 
-    }
-    
+    }    
     pnlPrincipal.add(nuevoFormulario);
 
     // Maximizar y quitar título
     nuevoFormulario.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
     ((javax.swing.plaf.basic.BasicInternalFrameUI)nuevoFormulario.getUI()).setNorthPane(null);
     nuevoFormulario.setBounds(0, 0, pnlPrincipal.getWidth(), pnlPrincipal.getHeight());
-
     nuevoFormulario.setVisible(true);
 }
 
@@ -80,6 +68,7 @@ private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
         menuEmpleados = new javax.swing.JMenu();
         menuVentas = new javax.swing.JMenu();
         menuUsuarios = new javax.swing.JMenu();
+        CerrarSesion = new javax.swing.JMenu();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -187,6 +176,19 @@ private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
         });
         jMenuBar1.add(menuUsuarios);
 
+        CerrarSesion.setText("Cerrar Sesion");
+        CerrarSesion.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                CerrarSesionMouseClicked(evt);
+            }
+        });
+        CerrarSesion.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                CerrarSesionActionPerformed(evt);
+            }
+        });
+        jMenuBar1.add(CerrarSesion);
+
         setJMenuBar(jMenuBar1);
 
         pack();
@@ -256,6 +258,31 @@ private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
         pnlPrincipal.repaint();
     }//GEN-LAST:event_pnlPrincipalAncestorAdded
 
+    private void CerrarSesionMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_CerrarSesionMouseClicked
+          int confirm = JOptionPane.showConfirmDialog(
+        this, 
+        "¿Seguro que deseas cerrar sesión?", 
+        "Confirmar", 
+        JOptionPane.YES_NO_OPTION
+    );
+
+    if (confirm == JOptionPane.YES_OPTION) {
+        // Limpiar datos de sesión
+        SesionUsuario.rol = null; 
+        SesionUsuario.nombreUsuario = null;
+
+        // Cerrar ventana principal
+        this.dispose();
+
+        // Abrir ventana de login
+        new FrmLogin().setVisible(true);
+    }
+    }//GEN-LAST:event_CerrarSesionMouseClicked
+
+    private void CerrarSesionActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_CerrarSesionActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_CerrarSesionActionPerformed
+
     public static void main(String args[]) {
          new FrmLogin().setVisible(true);
          
@@ -272,6 +299,7 @@ private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
     }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JMenu CerrarSesion;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuEmpleados;
     private javax.swing.JMenu menuFunciones;
