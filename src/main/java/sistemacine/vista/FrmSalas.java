@@ -191,15 +191,19 @@ private void limpiarCampos() {
                 formMouseClicked(evt);
             }
         });
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("GESTION DE FUNCIONES");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 20, -1, -1));
 
         lblFuncion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblFuncion.setText("ID SALA");
+        getContentPane().add(lblFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 90, 107, -1));
 
         lblPelicula.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblPelicula.setText("NOMBRE");
+        getContentPane().add(lblPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 240, 107, -1));
 
         tblSalas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -214,8 +218,11 @@ private void limpiarCampos() {
         ));
         jScrollPane1.setViewportView(tblSalas);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(560, 90, 890, 510));
+
         lblFecha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblFecha.setText("TIPO");
+        getContentPane().add(lblFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 420, 107, -1));
 
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnGuardar.setText("GUARDAR");
@@ -224,9 +231,11 @@ private void limpiarCampos() {
                 btnGuardarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 660, 132, -1));
 
         lblHora.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblHora.setText("CAPACIDAD");
+        getContentPane().add(lblHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(110, 560, 107, 20));
 
         btnCerrar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnCerrar.setText("CERRAR");
@@ -235,6 +244,7 @@ private void limpiarCampos() {
                 btnCerrarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 660, 119, -1));
 
         btnEditar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnEditar.setText("ACTUALIZAR");
@@ -243,6 +253,7 @@ private void limpiarCampos() {
                 btnEditarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(620, 660, -1, -1));
 
         txtIdSalas.setText("jTextField1");
         txtIdSalas.addActionListener(new java.awt.event.ActionListener() {
@@ -250,6 +261,7 @@ private void limpiarCampos() {
                 txtIdSalasActionPerformed(evt);
             }
         });
+        getContentPane().add(txtIdSalas, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 90, 152, -1));
 
         btnLimpiar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnLimpiar.setText("LIMPIAR");
@@ -258,6 +270,7 @@ private void limpiarCampos() {
                 btnLimpiarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(890, 660, 125, -1));
 
         btnNuevo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnNuevo.setText("NUEVO");
@@ -266,6 +279,7 @@ private void limpiarCampos() {
                 btnNuevoActionPerformed(evt);
             }
         });
+        getContentPane().add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 660, 115, -1));
 
         txtTipoSalas.setText("jTextField1");
         txtTipoSalas.addActionListener(new java.awt.event.ActionListener() {
@@ -273,6 +287,7 @@ private void limpiarCampos() {
                 txtTipoSalasActionPerformed(evt);
             }
         });
+        getContentPane().add(txtTipoSalas, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 410, 158, -1));
 
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminar.setText("ELIMINAR");
@@ -281,6 +296,7 @@ private void limpiarCampos() {
                 btnEliminarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(750, 660, 122, -1));
 
         txtCapacidadSalas.setText("jTextField1");
         txtCapacidadSalas.addActionListener(new java.awt.event.ActionListener() {
@@ -288,6 +304,7 @@ private void limpiarCampos() {
                 txtCapacidadSalasActionPerformed(evt);
             }
         });
+        getContentPane().add(txtCapacidadSalas, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 560, 158, 20));
 
         txtNombreSala.setText("jTextField1");
         txtNombreSala.addActionListener(new java.awt.event.ActionListener() {
@@ -295,84 +312,7 @@ private void limpiarCampos() {
                 txtNombreSalaActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(390, 390, 390)
-                .addComponent(jLabel1)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(lblPelicula, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblFecha, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblHora, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 107, Short.MAX_VALUE)
-                            .addComponent(lblFuncion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtNombreSala, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
-                            .addComponent(txtIdSalas, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(txtTipoSalas, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtCapacidadSalas, javax.swing.GroupLayout.Alignment.LEADING))
-                        .addGap(33, 33, 33)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 505, Short.MAX_VALUE)
-                        .addGap(200, 200, 200))))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1)
-                .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblFuncion, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtIdSalas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtNombreSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblPelicula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 53, Short.MAX_VALUE)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(txtTipoSalas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(46, 46, 46)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txtCapacidadSalas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblHora, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(62, 62, 62)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(btnEliminar))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnEditar)
-                        .addComponent(btnLimpiar)
-                        .addComponent(btnCerrar)
-                        .addComponent(btnNuevo)
-                        .addComponent(btnGuardar)))
-                .addGap(165, 165, 165))
-        );
+        getContentPane().add(txtNombreSala, new org.netbeans.lib.awtextra.AbsoluteConstraints(230, 240, 158, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

@@ -6,7 +6,7 @@ import java.util.List;
 
 public class PeliculasDAO {
 
-    public List<Pelicula> obtenerTodas() throws SQLException {
+    public List<Pelicula> CargarTablaPeliculas() throws SQLException {
         List<Pelicula> lista = new ArrayList<>();
         String sql = "SELECT pelicula_id, titulo, duracion, sinopsis, clasificacion FROM peliculas";
 

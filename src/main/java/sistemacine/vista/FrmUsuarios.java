@@ -345,27 +345,33 @@ private void FilaSeleccionada() {
         txtRoles = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("GESTION DE USUARIOS");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(680, 10, 195, -1));
 
         lblUsuarios.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblUsuarios.setText("USUARIO");
+        getContentPane().add(lblUsuarios, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 93, -1));
 
         lblContrasenia.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblContrasenia.setText("CONTRASEÑA");
+        getContentPane().add(lblContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 320, 93, 10));
 
         txtUsuario.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtUsuarioActionPerformed(evt);
             }
         });
+        getContentPane().add(txtUsuario, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 200, 182, -1));
 
         txtContrasenia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtContraseniaActionPerformed(evt);
             }
         });
+        getContentPane().add(txtContrasenia, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 320, 182, 20));
 
         tblUsuarios.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -385,11 +391,15 @@ private void FilaSeleccionada() {
         });
         jScrollPane1.setViewportView(tblUsuarios);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 90, 850, 490));
+
         lblRoles.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblRoles.setText("ROLES");
+        getContentPane().add(lblRoles, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 550, 93, -1));
 
         btnNuevo.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnNuevo.setText("NUEVO");
+        getContentPane().add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(480, 670, 100, -1));
 
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnGuardar.setText("GUARDAR");
@@ -398,6 +408,7 @@ private void FilaSeleccionada() {
                 btnGuardarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(600, 670, -1, -1));
 
         btnActualizar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnActualizar.setText("ACTUALIZAR");
@@ -406,6 +417,7 @@ private void FilaSeleccionada() {
                 btnActualizarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnActualizar, new org.netbeans.lib.awtextra.AbsoluteConstraints(710, 670, -1, -1));
 
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminar.setText("ELIMINAR");
@@ -414,6 +426,7 @@ private void FilaSeleccionada() {
                 btnEliminarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 670, 105, -1));
 
         btnCerrar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnCerrar.setText("CERRAR");
@@ -422,111 +435,36 @@ private void FilaSeleccionada() {
                 btnCerrarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(960, 670, 95, -1));
 
         lblEmpleados.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblEmpleados.setText("EMPLEADO");
+        getContentPane().add(lblEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 100, 93, -1));
 
         cboEmpleados.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboEmpleadosActionPerformed(evt);
             }
         });
+        getContentPane().add(cboEmpleados, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 100, 182, -1));
 
         lblIdRol.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblIdRol.setText("ID ROL");
+        getContentPane().add(lblIdRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(160, 430, 93, -1));
 
         txtIdRol.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtIdRolActionPerformed(evt);
             }
         });
+        getContentPane().add(txtIdRol, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 430, 182, -1));
 
         txtRoles.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txtRolesActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(37, 37, 37)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblRoles, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblContrasenia, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblUsuarios, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblEmpleados, javax.swing.GroupLayout.DEFAULT_SIZE, 93, Short.MAX_VALUE)
-                            .addComponent(lblIdRol, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                            .addComponent(txtIdRol, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtContrasenia, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(txtUsuario, javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboEmpleados, javax.swing.GroupLayout.Alignment.LEADING, 0, 182, Short.MAX_VALUE)
-                            .addComponent(txtRoles))
-                        .addGap(29, 29, 29)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 530, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(158, 158, 158)
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 100, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnGuardar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnActualizar)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(36, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(347, 347, 347))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(45, 45, 45)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(lblEmpleados))
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                                .addComponent(cboEmpleados, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addGap(35, 35, 35)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblUsuarios)
-                            .addComponent(txtUsuario, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(41, 41, 41)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblContrasenia)
-                            .addComponent(txtContrasenia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(31, 31, 31)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblIdRol)
-                            .addComponent(txtIdRol, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(34, 34, 34)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblRoles)
-                            .addComponent(txtRoles)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(90, 90, 90)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnNuevo)
-                    .addComponent(btnGuardar)
-                    .addComponent(btnActualizar)
-                    .addComponent(btnEliminar)
-                    .addComponent(btnCerrar))
-                .addGap(106, 106, 106))
-        );
+        getContentPane().add(txtRoles, new org.netbeans.lib.awtextra.AbsoluteConstraints(250, 550, 182, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

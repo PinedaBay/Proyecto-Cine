@@ -1,6 +1,8 @@
 package sistemacine.vista;
+import java.awt.BorderLayout;
 import javax.swing.JInternalFrame;
 import javax.swing.JOptionPane;
+import sistemacine.modelo.JPanelImage;
 public class FrmPrincipal extends javax.swing.JFrame {    
     private static final java.util.logging.Logger logger = java.util.logging.Logger.getLogger(FrmPrincipal.class.getName());
     public FrmPrincipal() {
@@ -39,22 +41,38 @@ public class FrmPrincipal extends javax.swing.JFrame {
       default -> JOptionPane.showMessageDialog(this, "Rol desconocido: " + rol);
     }
     }    
+//private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
+    //for (JInternalFrame frame : pnlPrincipal.getAllFrames()) {
+   //     frame.dispose(); 
+   // }
+  //  pnlPrincipal.add(nuevoFormulario);
+  //  nuevoFormulario.setVisible(true);
+  //  int x = (pnlPrincipal.getWidth() - nuevoFormulario.getWidth())/2;
+  //  int y = (pnlPrincipal.getHeight() - nuevoFormulario.getHeight())/2;
+  //  nuevoFormulario.setLocation(x, y);
+//}
 private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
-    for (JInternalFrame frame : desktopPane.getAllFrames()) {
+    for (JInternalFrame frame : pnlPrincipal.getAllFrames()) {
         frame.dispose(); 
     }
-    desktopPane.add(nuevoFormulario);
+    
+    pnlPrincipal.add(nuevoFormulario);
+
+    // Maximizar y quitar título
+    nuevoFormulario.putClientProperty("JInternalFrame.isPalette", Boolean.TRUE);
+    ((javax.swing.plaf.basic.BasicInternalFrameUI)nuevoFormulario.getUI()).setNorthPane(null);
+    nuevoFormulario.setBounds(0, 0, pnlPrincipal.getWidth(), pnlPrincipal.getHeight());
+
     nuevoFormulario.setVisible(true);
-    int x = (desktopPane.getWidth() - nuevoFormulario.getWidth())/2;
-    int y = (desktopPane.getHeight() - nuevoFormulario.getHeight())/2;
-    nuevoFormulario.setLocation(x, y);
 }
+
+
 
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        desktopPane = new javax.swing.JDesktopPane();
+        pnlPrincipal = new javax.swing.JDesktopPane();
         jMenuBar1 = new javax.swing.JMenuBar();
         menuPeliculas = new javax.swing.JMenu();
         menuFunciones = new javax.swing.JMenu();
@@ -65,20 +83,31 @@ private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
-        desktopPane.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        pnlPrincipal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        pnlPrincipal.addAncestorListener(new javax.swing.event.AncestorListener() {
+            public void ancestorAdded(javax.swing.event.AncestorEvent evt) {
+                pnlPrincipalAncestorAdded(evt);
+            }
+            public void ancestorMoved(javax.swing.event.AncestorEvent evt) {
+            }
+            public void ancestorRemoved(javax.swing.event.AncestorEvent evt) {
+            }
+        });
 
-        javax.swing.GroupLayout desktopPaneLayout = new javax.swing.GroupLayout(desktopPane);
-        desktopPane.setLayout(desktopPaneLayout);
-        desktopPaneLayout.setHorizontalGroup(
-            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        javax.swing.GroupLayout pnlPrincipalLayout = new javax.swing.GroupLayout(pnlPrincipal);
+        pnlPrincipal.setLayout(pnlPrincipalLayout);
+        pnlPrincipalLayout.setHorizontalGroup(
+            pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 908, Short.MAX_VALUE)
         );
-        desktopPaneLayout.setVerticalGroup(
-            desktopPaneLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+        pnlPrincipalLayout.setVerticalGroup(
+            pnlPrincipalLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 605, Short.MAX_VALUE)
         );
 
-        getContentPane().add(desktopPane, java.awt.BorderLayout.CENTER);
+        getContentPane().add(pnlPrincipal, java.awt.BorderLayout.CENTER);
+
+        jMenuBar1.setForeground(new java.awt.Color(51, 102, 255));
 
         menuPeliculas.setText("Peliculas");
         menuPeliculas.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -165,25 +194,25 @@ private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
 
     private void menuVentasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuVentasActionPerformed
         FrmVentaBoletos v = new FrmVentaBoletos();
-        desktopPane.add(v);
+        pnlPrincipal.add(v);
         v.setVisible(true);
     }//GEN-LAST:event_menuVentasActionPerformed
 
     private void menuEmpleadosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuEmpleadosActionPerformed
         FrmEmpleado e = new FrmEmpleado();
-        desktopPane.add(e);
+        pnlPrincipal.add(e);
         e.setVisible(true);
     }//GEN-LAST:event_menuEmpleadosActionPerformed
 
     private void menuSalasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuSalasActionPerformed
         FrmSalas s = new FrmSalas();
-        desktopPane.add(s);
+        pnlPrincipal.add(s);
         s.setVisible(true);
     }//GEN-LAST:event_menuSalasActionPerformed
 
     private void menuFuncionesActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuFuncionesActionPerformed
         FrmFunciones f = new FrmFunciones();
-        desktopPane.add(f);
+        pnlPrincipal.add(f);
         f.setVisible(true);
     }//GEN-LAST:event_menuFuncionesActionPerformed
 
@@ -217,9 +246,15 @@ private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
 
     private void menuUsuariosActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuUsuariosActionPerformed
         FrmUsuarios u = new FrmUsuarios();
-        desktopPane.add(u);
+        pnlPrincipal.add(u);
         u.setVisible(true);
     }//GEN-LAST:event_menuUsuariosActionPerformed
+
+    private void pnlPrincipalAncestorAdded(javax.swing.event.AncestorEvent evt) {//GEN-FIRST:event_pnlPrincipalAncestorAdded
+        JPanelImage mImagen = new JPanelImage(pnlPrincipal, "/Imagenes/Pantalla Principal.jpg");
+        pnlPrincipal.add(mImagen, BorderLayout.CENTER);
+        pnlPrincipal.repaint();
+    }//GEN-LAST:event_pnlPrincipalAncestorAdded
 
     public static void main(String args[]) {
          new FrmLogin().setVisible(true);
@@ -237,7 +272,6 @@ private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
     }    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
-    private javax.swing.JDesktopPane desktopPane;
     private javax.swing.JMenuBar jMenuBar1;
     private javax.swing.JMenu menuEmpleados;
     private javax.swing.JMenu menuFunciones;
@@ -245,5 +279,6 @@ private void abrirFormularioUnico(JInternalFrame nuevoFormulario) {
     private javax.swing.JMenu menuSalas;
     private javax.swing.JMenu menuUsuarios;
     private javax.swing.JMenu menuVentas;
+    private javax.swing.JDesktopPane pnlPrincipal;
     // End of variables declaration//GEN-END:variables
 }

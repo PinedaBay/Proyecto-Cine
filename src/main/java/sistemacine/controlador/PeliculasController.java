@@ -22,7 +22,7 @@ public class PeliculasController {
 
     public void cargarPeliculas() {
         try {
-            List<Pelicula> peliculas = modelo.obtenerTodas();
+            List<Pelicula> peliculas = modelo.CargarTablaPeliculas();
             vista.llenarTabla(peliculas);
         } catch (SQLException e) {
             vista.mostrarMensaje("Error cargando películas: " + e.getMessage());

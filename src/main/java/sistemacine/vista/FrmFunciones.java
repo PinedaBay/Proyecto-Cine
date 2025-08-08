@@ -383,24 +383,31 @@ private void eliminarFuncion() {
         cboSegundo = new javax.swing.JComboBox<>();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 18)); // NOI18N
         jLabel1.setText("GESTION DE FUNCIONES");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 20, -1, -1));
 
         lblFuncion.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblFuncion.setText("ID FUNCION");
+        getContentPane().add(lblFuncion, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 100, 94, -1));
 
         lblPelicula.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblPelicula.setText("PELICULA");
+        getContentPane().add(lblPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 180, 94, -1));
 
         lblFecha.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblFecha.setText("FECHA");
+        getContentPane().add(lblFecha, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 260, 94, -1));
 
         lblHora.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblHora.setText("HORA");
+        getContentPane().add(lblHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 340, 94, -1));
 
         lblSala.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblSala.setText("SALA");
+        getContentPane().add(lblSala, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 440, 94, -1));
 
         txtIdFunciones.setText("jTextField1");
         txtIdFunciones.addActionListener(new java.awt.event.ActionListener() {
@@ -408,6 +415,7 @@ private void eliminarFuncion() {
                 txtIdFuncionesActionPerformed(evt);
             }
         });
+        getContentPane().add(txtIdFunciones, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 100, 225, -1));
 
         cboPelicula.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboPelicula.addActionListener(new java.awt.event.ActionListener() {
@@ -415,6 +423,7 @@ private void eliminarFuncion() {
                 cboPeliculaActionPerformed(evt);
             }
         });
+        getContentPane().add(cboPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 180, 225, -1));
 
         TablaFunciones.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -434,6 +443,8 @@ private void eliminarFuncion() {
         });
         jScrollPane1.setViewportView(TablaFunciones);
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(530, 90, 900, 470));
+
         btnGuardar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnGuardar.setText("GUARDAR");
         btnGuardar.addActionListener(new java.awt.event.ActionListener() {
@@ -441,6 +452,7 @@ private void eliminarFuncion() {
                 btnGuardarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnGuardar, new org.netbeans.lib.awtextra.AbsoluteConstraints(460, 650, 132, -1));
 
         btnCerrar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnCerrar.setText("CERRAR");
@@ -449,6 +461,7 @@ private void eliminarFuncion() {
                 btnCerrarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(1030, 650, 119, -1));
 
         btnEditar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnEditar.setText("ACTUALIZAR");
@@ -457,6 +470,7 @@ private void eliminarFuncion() {
                 btnEditarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEditar, new org.netbeans.lib.awtextra.AbsoluteConstraints(610, 650, -1, -1));
 
         btnLimpiar.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnLimpiar.setText("LIMPIAR");
@@ -465,6 +479,7 @@ private void eliminarFuncion() {
                 btnLimpiarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnLimpiar, new org.netbeans.lib.awtextra.AbsoluteConstraints(880, 650, 125, -1));
 
         btnNuevo.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         btnNuevo.setText("NUEVO");
@@ -473,6 +488,7 @@ private void eliminarFuncion() {
                 btnNuevoActionPerformed(evt);
             }
         });
+        getContentPane().add(btnNuevo, new org.netbeans.lib.awtextra.AbsoluteConstraints(330, 650, 115, -1));
 
         btnEliminar.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         btnEliminar.setText("ELIMINAR");
@@ -481,9 +497,11 @@ private void eliminarFuncion() {
                 btnEliminarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnEliminar, new org.netbeans.lib.awtextra.AbsoluteConstraints(740, 650, 122, -1));
 
         lblSala1.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         lblSala1.setText("PROMOCIONES");
+        getContentPane().add(lblSala1, new org.netbeans.lib.awtextra.AbsoluteConstraints(90, 530, 94, -1));
 
         cboPromociones.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboPromociones.addActionListener(new java.awt.event.ActionListener() {
@@ -491,6 +509,7 @@ private void eliminarFuncion() {
                 cboPromocionesActionPerformed(evt);
             }
         });
+        getContentPane().add(cboPromociones, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 530, 225, -1));
 
         cboSala.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboSala.addActionListener(new java.awt.event.ActionListener() {
@@ -498,148 +517,49 @@ private void eliminarFuncion() {
                 cboSalaActionPerformed(evt);
             }
         });
+        getContentPane().add(cboSala, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 440, 225, -1));
 
         cboAnio.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboAnioActionPerformed(evt);
             }
         });
+        getContentPane().add(cboAnio, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 260, -1, -1));
 
         cboMes.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboMesActionPerformed(evt);
             }
         });
+        getContentPane().add(cboMes, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 260, 57, -1));
 
         cboDia.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboDiaActionPerformed(evt);
             }
         });
+        getContentPane().add(cboDia, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 260, 51, -1));
 
         cboHora.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboHoraActionPerformed(evt);
             }
         });
+        getContentPane().add(cboHora, new org.netbeans.lib.awtextra.AbsoluteConstraints(200, 340, -1, -1));
 
         cboMinuto.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboMinutoActionPerformed(evt);
             }
         });
+        getContentPane().add(cboMinuto, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 340, 57, -1));
 
         cboSegundo.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cboSegundoActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(64, 64, 64)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(lblFecha, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblHora, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblPelicula, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(lblFuncion, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lblSala, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblSala1, javax.swing.GroupLayout.PREFERRED_SIZE, 94, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)))
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(txtIdFunciones)
-                    .addComponent(cboPelicula, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboHora, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(cboAnio, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(27, 27, 27)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboMes, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, 57, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addComponent(cboSegundo, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboDia, javax.swing.GroupLayout.PREFERRED_SIZE, 51, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(cboSala, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cboPromociones, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jScrollPane1)
-                .addGap(42, 42, 42))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(74, 74, 74)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jLabel1)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(btnNuevo, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnGuardar, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnEditar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(btnEliminar, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnLimpiar, javax.swing.GroupLayout.PREFERRED_SIZE, 125, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(18, 18, 18)
-                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 119, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(183, Short.MAX_VALUE))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(24, 24, 24)
-                .addComponent(jLabel1)
-                .addGap(46, 46, 46)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblFuncion)
-                            .addComponent(txtIdFunciones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(32, 32, 32)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblPelicula)
-                            .addComponent(cboPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(29, 29, 29)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblFecha)
-                            .addComponent(cboAnio, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboMes, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboDia, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(26, 26, 26)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblHora)
-                            .addComponent(cboHora, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboMinuto, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(cboSegundo, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblSala)
-                            .addComponent(cboSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(28, 28, 28)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(lblSala1)
-                            .addComponent(cboPromociones, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE))
-                .addGap(93, 93, 93)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(2, 2, 2)
-                        .addComponent(btnEliminar))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                        .addComponent(btnEditar)
-                        .addComponent(btnLimpiar)
-                        .addComponent(btnCerrar)
-                        .addComponent(btnNuevo)
-                        .addComponent(btnGuardar)))
-                .addGap(71, 71, 71))
-        );
+        getContentPane().add(cboSegundo, new org.netbeans.lib.awtextra.AbsoluteConstraints(370, 340, 51, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

@@ -286,18 +286,23 @@ public void actualizarBarraCapacidad(String nombreSala) {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
         setPreferredSize(new java.awt.Dimension(1000, 428));
+        getContentPane().setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 1, 14)); // NOI18N
         jLabel1.setText("VENTA DE BOLETOS");
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(700, 10, 158, -1));
 
         lblNombreCliente.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblNombreCliente.setText("NOMBRE DEL CLIENTE");
+        getContentPane().add(lblNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 140, -1, -1));
 
         lblSala.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblSala.setText("SALA");
+        getContentPane().add(lblSala, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 500, 143, -1));
 
         lblCapacidadSala.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblCapacidadSala.setText("CAPACIDAD DE LA SALA");
+        getContentPane().add(lblCapacidadSala, new org.netbeans.lib.awtextra.AbsoluteConstraints(410, 80, -1, -1));
 
         txtNombreCliente.setText("jTextField1");
         txtNombreCliente.addActionListener(new java.awt.event.ActionListener() {
@@ -305,6 +310,7 @@ public void actualizarBarraCapacidad(String nombreSala) {
                 txtNombreClienteActionPerformed(evt);
             }
         });
+        getContentPane().add(txtNombreCliente, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 140, 217, -1));
 
         cboSala.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboSala.addActionListener(new java.awt.event.ActionListener() {
@@ -312,9 +318,11 @@ public void actualizarBarraCapacidad(String nombreSala) {
                 cboSalaActionPerformed(evt);
             }
         });
+        getContentPane().add(cboSala, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 490, 217, -1));
 
         barraCapacidadSala.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         barraCapacidadSala.setStringPainted(true);
+        getContentPane().add(barraCapacidadSala, new org.netbeans.lib.awtextra.AbsoluteConstraints(570, 60, 890, 50));
 
         tblVentaBoletos.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -342,6 +350,8 @@ public void actualizarBarraCapacidad(String nombreSala) {
             tblVentaBoletos.getColumnModel().getColumn(0).setResizable(false);
         }
 
+        getContentPane().add(jScrollPane1, new org.netbeans.lib.awtextra.AbsoluteConstraints(590, 140, 870, 470));
+
         btnVenderBoleto.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnVenderBoleto.setText("VENDER BOLETO");
         btnVenderBoleto.addActionListener(new java.awt.event.ActionListener() {
@@ -349,9 +359,11 @@ public void actualizarBarraCapacidad(String nombreSala) {
                 btnVenderBoletoActionPerformed(evt);
             }
         });
+        getContentPane().add(btnVenderBoleto, new org.netbeans.lib.awtextra.AbsoluteConstraints(430, 670, 169, -1));
 
         lblCantidad.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblCantidad.setText("CANTIDAD");
+        getContentPane().add(lblCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 310, 143, -1));
 
         txtCantidad.setText("jTextField1");
         txtCantidad.addActionListener(new java.awt.event.ActionListener() {
@@ -367,9 +379,11 @@ public void actualizarBarraCapacidad(String nombreSala) {
                 txtCantidadKeyReleased(evt);
             }
         });
+        getContentPane().add(txtCantidad, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 300, 217, -1));
 
         lblTotal.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblTotal.setText("TOTAL");
+        getContentPane().add(lblTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 580, 143, -1));
 
         txtTotal.setText("jTextField2");
         txtTotal.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -386,9 +400,11 @@ public void actualizarBarraCapacidad(String nombreSala) {
                 txtTotalActionPerformed(evt);
             }
         });
+        getContentPane().add(txtTotal, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 580, 217, 30));
 
         lblPrecioUnitario.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblPrecioUnitario.setText("PRECIO UNITARIO");
+        getContentPane().add(lblPrecioUnitario, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 410, 143, -1));
 
         txtPrecioU.setText("jTextField1");
         txtPrecioU.addAncestorListener(new javax.swing.event.AncestorListener() {
@@ -413,9 +429,11 @@ public void actualizarBarraCapacidad(String nombreSala) {
                 txtPrecioUKeyReleased(evt);
             }
         });
+        getContentPane().add(txtPrecioU, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 400, 217, -1));
 
         lblPelicula.setFont(new java.awt.Font("Tahoma", 1, 12)); // NOI18N
         lblPelicula.setText("PELICULA");
+        getContentPane().add(lblPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(150, 210, 143, -1));
 
         cboPelicula.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cboPelicula.addActionListener(new java.awt.event.ActionListener() {
@@ -423,6 +441,7 @@ public void actualizarBarraCapacidad(String nombreSala) {
                 cboPeliculaActionPerformed(evt);
             }
         });
+        getContentPane().add(cboPelicula, new org.netbeans.lib.awtextra.AbsoluteConstraints(300, 210, 217, -1));
 
         btnReenbolsar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnReenbolsar.setText("REEMBOLSO");
@@ -431,6 +450,7 @@ public void actualizarBarraCapacidad(String nombreSala) {
                 btnReenbolsarActionPerformed(evt);
             }
         });
+        getContentPane().add(btnReenbolsar, new org.netbeans.lib.awtextra.AbsoluteConstraints(650, 670, 143, -1));
 
         btnCerrar.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
         btnCerrar.setText("CERRAR");
@@ -439,113 +459,7 @@ public void actualizarBarraCapacidad(String nombreSala) {
                 btnCerrarActionPerformed(evt);
             }
         });
-
-        javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
-        getContentPane().setLayout(layout);
-        layout.setHorizontalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(383, 383, 383)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 158, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(layout.createSequentialGroup()
-                .addGap(49, 49, 49)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblNombreCliente, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addGap(885, 885, 885))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                    .addComponent(lblSala, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblPrecioUnitario, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 143, Short.MAX_VALUE)
-                                    .addComponent(lblPelicula, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                    .addComponent(lblCantidad, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cboPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(txtPrecioU, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(cboSala, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(lblTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(btnVenderBoleto, javax.swing.GroupLayout.PREFERRED_SIZE, 169, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(49, 49, 49)
-                                        .addComponent(btnReenbolsar, javax.swing.GroupLayout.PREFERRED_SIZE, 143, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGap(54, 54, 54)
-                                        .addComponent(btnCerrar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                            .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addComponent(txtNombreCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 217, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                        .addGap(18, 18, 18)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 512, javax.swing.GroupLayout.PREFERRED_SIZE)))))
-                        .addGap(0, 0, Short.MAX_VALUE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(lblCapacidadSala)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(barraCapacidadSala, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
-                .addGap(205, 205, 205))
-        );
-        layout.setVerticalGroup(
-            layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(14, 14, 14)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 17, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(lblCapacidadSala)
-                    .addComponent(barraCapacidadSala, javax.swing.GroupLayout.DEFAULT_SIZE, 22, Short.MAX_VALUE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(lblNombreCliente))
-                            .addComponent(txtNombreCliente, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(lblPelicula))
-                            .addComponent(cboPelicula, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(lblCantidad))
-                            .addComponent(txtCantidad, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(lblPrecioUnitario))
-                            .addComponent(txtPrecioU, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(18, 18, 18)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(lblSala))
-                            .addComponent(cboSala, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(24, 24, 24)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGap(7, 7, 7)
-                                .addComponent(lblTotal))
-                            .addComponent(txtTotal, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 222, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(39, 39, 39)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(btnVenderBoleto)
-                    .addComponent(btnReenbolsar)
-                    .addComponent(btnCerrar))
-                .addGap(145, 145, 145))
-        );
+        getContentPane().add(btnCerrar, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 670, 120, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
