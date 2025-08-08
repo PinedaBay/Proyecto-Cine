@@ -1,16 +1,3 @@
-select *from peliculas;
-select *from funciones;
-select *from boletos;
-select *from clientes;
-select *from compras;
-select *from empleados;
-select *from funciones;
-select *from peliculas;
-select *from roles;
-select *from salas;
-select *from usuarios;
-select *from usuarios_roles;
-select *from ventas;
 
 -- Creacion de la base de datos
 CREATE DATABASE SistemaCine;
@@ -106,25 +93,25 @@ CREATE TABLE boletos (
 );
 
 -- Insercion de datos en la base de datos
--- Películas
+-- PelÃ­culas
 INSERT INTO peliculas (titulo, duracion, sinopsis, clasificacion) VALUES
-('Inception', 148, 'Un ladrón roba secretos a través de sueños.', 'PG-13'),
+('Inception', 148, 'Un ladrÃ³n roba secretos a travÃ©s de sueÃ±os.', 'PG-13'),
 ('Titanic', 195, 'Historia de amor en el Titanic.', 'PG-13'),
 ('Avengers: Endgame', 181, 'Batalla final contra Thanos.', 'PG-13'),
-('Coco', 105, 'Niño viaja al mundo de los muertos.', 'PG'),
+('Coco', 105, 'NiÃ±o viaja al mundo de los muertos.', 'PG'),
 ('The Godfather', 175, 'Mafia y familia.', 'R'),
 ('Toy Story', 81, 'Juguetes que cobran vida.', 'G'),
 ('Jurassic Park', 127, 'Dinosaurios clonados.', 'PG-13'),
 ('The Matrix', 136, 'Realidad simulada.', 'R'),
-('Parasite', 132, 'Crítica social y suspenso.', 'R'),
-('The Lion King', 88, 'Rey león y su destino.', 'G');
+('Parasite', 132, 'CrÃ­tica social y suspenso.', 'R'),
+('The Lion King', 88, 'Rey leÃ³n y su destino.', 'G');
 
---  Géneros
+--  GÃ©neros
 INSERT INTO generos (nombre_genero) VALUES
-('Acción'), ('Drama'), ('Fantasía'), ('Comedia'), ('Animación'),
-('Aventura'), ('Romance'), ('Ciencia Ficción'), ('Suspenso'), ('Familiar');
+('AcciÃ³n'), ('Drama'), ('FantasÃ­a'), ('Comedia'), ('AnimaciÃ³n'),
+('Aventura'), ('Romance'), ('Ciencia FicciÃ³n'), ('Suspenso'), ('Familiar');
 
--- Películas-Género
+-- PelÃ­culas-GÃ©nero
 INSERT INTO peliculas_genero (pelicula_id, genero_id) VALUES
 (1, 1), (1, 8),
 (2, 2), (2, 7),
@@ -152,15 +139,15 @@ INSERT INTO salas (nombre, tipo, capacidad) VALUES
 
 -- Promociones
 INSERT INTO promociones (descripcion, descuento) VALUES
-('Miércoles 2x1', 50.00),
+('MiÃ©rcoles 2x1', 50.00),
 ('Promo estudiantes', 25.00),
 ('Descuento tercera edad', 30.00),
 ('Viernes Familiar', 20.00),
 ('Promo pareja', 40.00),
-('Noche de clásicos', 15.00),
+('Noche de clÃ¡sicos', 15.00),
 ('Tanda matutina', 10.00),
-('Descuento niños', 35.00),
-('Promo cumpleañero', 30.00),
+('Descuento niÃ±os', 35.00),
+('Promo cumpleaÃ±ero', 30.00),
 ('Lunes locos', 45.00);
 
 -- Funciones
@@ -178,29 +165,29 @@ INSERT INTO funciones (pelicula_id, sala_id, fecha, hora, promocion_id) VALUES
 
 -- Clientes
 INSERT INTO clientes (nombre, correo) VALUES
-('Carlos Gómez', 'carlos@gmail.com'),
+('Carlos GÃ³mez', 'carlos@gmail.com'),
 ('Ana Torres', 'ana@hotmail.com'),
-('Luis Pérez', 'luis@gmail.com'),
-('María López', 'maria@yahoo.com'),
-('Pedro Sánchez', 'pedro@gmail.com'),
+('Luis PÃ©rez', 'luis@gmail.com'),
+('MarÃ­a LÃ³pez', 'maria@yahoo.com'),
+('Pedro SÃ¡nchez', 'pedro@gmail.com'),
 ('Laura Mendoza', 'laura@hotmail.com'),
 ('Jorge Ruiz', 'jorge@outlook.com'),
 ('Daniela Vargas', 'daniela@gmail.com'),
-('Fernando Díaz', 'fernando@yahoo.com'),
-('Lucía Herrera', 'lucia@hotmail.com');
+('Fernando DÃ­az', 'fernando@yahoo.com'),
+('LucÃ­a Herrera', 'lucia@hotmail.com');
 
 -- Empleados
 INSERT INTO empleados (nombre, cargo) VALUES
 ('Sandra Morales', 'Cajero'),
-('Iván Castro', 'Taquillero'),
+('IvÃ¡n Castro', 'Taquillero'),
 ('Rebeca Ayala', 'Gerente'),
-('Tomás Rivera', 'Cajero'),
+('TomÃ¡s Rivera', 'Cajero'),
 ('Diana Molina', 'Administrador'),
 ('Marco Gil', 'Supervisor'),
-('Elena Ríos', 'Asistente'),
+('Elena RÃ­os', 'Asistente'),
 ('Gabriel Luna', 'Seguridad'),
 ('Valeria Torres', 'Cajero'),
-('Ángel Fernández', 'Cajero');
+('Ãngel FernÃ¡ndez', 'Cajero');
 
 -- Compras
 INSERT INTO compras (cliente_id, empleado_id, fecha, total) VALUES
@@ -236,7 +223,7 @@ START TRANSACTION;
 INSERT INTO compras (cliente_id, empleado_id, fecha, total)
 VALUES (1, 1, NOW(), 0.00);
 
--- Obtener el ID de la compra recién creada
+-- Obtener el ID de la compra reciÃ©n creada
 SET @compra_id = LAST_INSERT_ID();
 
 -- 2. Insertar boletos relacionados a esa compra
@@ -268,7 +255,7 @@ BEGIN
   JOIN salas s ON f.sala_id = s.sala_id
   WHERE f.funcion_id = NEW.funcion_id;
 
-  -- Contar boletos vendidos para esa función
+  -- Contar boletos vendidos para esa funciÃ³n
   SELECT COUNT(*) INTO boletos_vendidos
   FROM boletos
   WHERE funcion_id = NEW.funcion_id;
@@ -276,7 +263,7 @@ BEGIN
   -- Verificar aforo
   IF boletos_vendidos >= capacidad_sala THEN
     SIGNAL SQLSTATE '45000'
-    SET MESSAGE_TEXT = 'Capacidad de la sala alcanzada. No se puede vender más boletos.';
+    SET MESSAGE_TEXT = 'Capacidad de la sala alcanzada. No se puede vender mÃ¡s boletos.';
   END IF;
 END;
 //
@@ -314,7 +301,7 @@ BEGIN
     FROM boletos
     WHERE funcion_id = p_funcion_id;
 
-    -- Contar número de asientos solicitados
+    -- Contar nÃºmero de asientos solicitados
     SET v_num_asientos = LENGTH(p_asientos) - LENGTH(REPLACE(p_asientos, ',', '')) + 1;
 
     -- Verificar si hay aforo suficiente
@@ -337,7 +324,7 @@ BEGIN
         SET p_asientos = SUBSTRING(p_asientos, LOCATE(',', p_asientos) + 1);
     END WHILE;
 
-    -- Insertar el último asiento (o único si no había coma)
+    -- Insertar el Ãºltimo asiento (o Ãºnico si no habÃ­a coma)
     INSERT INTO boletos (compra_id, funcion_id, asiento, precio)
     VALUES (v_compra_id, p_funcion_id, p_asientos, v_precio_unitario);
 
@@ -366,7 +353,7 @@ SELECT
     F.funcion_id,
     P.titulo AS pelicula,
     S.nombre AS sala,
-    F.fecha AS fecha_funcion, -- corregido aquí
+    F.fecha AS fecha_funcion, -- corregido aquÃ­
     C.fecha AS fecha_compra,
     C.total AS total_pagado
 FROM compras C
@@ -388,9 +375,9 @@ SELECT F.funcion_id, P.titulo, S.nombre AS sala, F.fecha
 FROM funciones F
 JOIN peliculas P ON F.pelicula_id = P.pelicula_id
 JOIN salas S ON F.sala_id = S.sala_id
-WHERE F.fecha = CURDATE(); -- o usa una fecha específica
+WHERE F.fecha = CURDATE(); -- o usa una fecha especÃ­fica
 
--- Películas más vistas
+-- PelÃ­culas mÃ¡s vistas
 SELECT P.titulo, COUNT(B.boleto_id) AS total_boletos
 FROM boletos B 
 JOIN funciones F ON B.funcion_id = F.funcion_id
@@ -399,7 +386,7 @@ GROUP BY P.titulo
 ORDER BY total_boletos DESC
 LIMIT 5;
 
--- Ingresos por día o semana
+-- Ingresos por dÃ­a o semana
 SELECT DATE(C.fecha) AS dia, SUM(C.total) AS ingresos
 FROM compras C
 GROUP BY DATE(C.fecha)
@@ -464,175 +451,21 @@ ALTER TABLE ventas ALTER cliente_id SET DEFAULT NULL;
 -- se establecio como nulo
 
 
--- Tercer Parcial
+-- Insercion de roles
 
--- Crear base de datos
-CREATE DATABASE SistemaCine;
-USE SistemaCine;
-
--- Tabla: Películas
-CREATE TABLE peliculas (
-    pelicula_id INT AUTO_INCREMENT PRIMARY KEY,
-    titulo VARCHAR(255) NOT NULL,
-    duracion INT NOT NULL,
-    sinopsis TEXT,
-    clasificacion VARCHAR(10)
-);
-
--- Tabla: Géneros
-CREATE TABLE generos (
-    genero_id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_genero VARCHAR(100) NOT NULL
-);
-
--- Tabla puente: Películas-Género
-CREATE TABLE peliculas_genero (
-    pelicula_id INT,
-    genero_id INT,
-    PRIMARY KEY (pelicula_id, genero_id),
-    FOREIGN KEY (pelicula_id) REFERENCES peliculas(pelicula_id),
-    FOREIGN KEY (genero_id) REFERENCES generos(genero_id)
-);
-
--- Tabla: Salas
-CREATE TABLE salas (
-    sala_id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    tipo VARCHAR(50),
-    capacidad INT NOT NULL
-);
-
--- Tabla: Promociones
-CREATE TABLE promociones (
-    promocion_id INT AUTO_INCREMENT PRIMARY KEY,
-    descripcion VARCHAR(255),
-    descuento DECIMAL(5,2) DEFAULT 0.00
-);
-
--- Tabla: Funciones
-CREATE TABLE funciones (
-    funcion_id INT AUTO_INCREMENT PRIMARY KEY,
-    pelicula_id INT,
-    sala_id INT,
-    fecha DATE NOT NULL,
-    hora TIME NOT NULL,
-    promocion_id INT,
-    FOREIGN KEY (pelicula_id) REFERENCES peliculas(pelicula_id),
-    FOREIGN KEY (sala_id) REFERENCES salas(sala_id),
-    FOREIGN KEY (promocion_id) REFERENCES promociones(promocion_id)
-);
-
--- Tabla: Clientes
-CREATE TABLE clientes (
-    cliente_id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    correo VARCHAR(100) UNIQUE
-);
-
--- Tabla: Empleados
-CREATE TABLE empleados (
-    empleado_id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre VARCHAR(100) NOT NULL,
-    cargo VARCHAR(100),
-    activo BOOLEAN DEFAULT TRUE
-);
-
--- Tabla: Compras
-CREATE TABLE compras (
-    compra_id INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT,
-    empleado_id INT,
-    fecha DATETIME NOT NULL,
-    total DECIMAL(10,2),
-    FOREIGN KEY (cliente_id) REFERENCES clientes(cliente_id),
-    FOREIGN KEY (empleado_id) REFERENCES empleados(empleado_id)
-);
-
--- Tabla: Boletos
-CREATE TABLE boletos (
-    boleto_id INT AUTO_INCREMENT PRIMARY KEY,
-    compra_id INT,
-    funcion_id INT,
-    asiento VARCHAR(10),
-    precio DECIMAL(10,2),
-    FOREIGN KEY (compra_id) REFERENCES compras(compra_id),
-    FOREIGN KEY (funcion_id) REFERENCES funciones(funcion_id)
-);
-
--- Tabla: Ventas (resumen amigable para reportes)
-CREATE TABLE ventas (
-    venta_id INT AUTO_INCREMENT PRIMARY KEY,
-    cliente_id INT NULL,
-    nombre_cliente VARCHAR(100) NOT NULL,
-    pelicula VARCHAR(150) NOT NULL,
-    precio_unitario DECIMAL(10,2) NOT NULL,
-    cantidad INT NOT NULL,
-    sala VARCHAR(50) NOT NULL,
-    total DECIMAL(10,2) NOT NULL,
-    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (cliente_id) REFERENCES clientes(cliente_id)
-);
-
--- ================================================
--- MODULO DE SEGURIDAD
--- ================================================
-
--- Tabla: Usuarios
-CREATE TABLE usuarios (
-    usuario_id INT AUTO_INCREMENT PRIMARY KEY,
-    NombreUsuario VARCHAR(50) UNIQUE NOT NULL,
-    Contrasenia VARCHAR(255) NOT NULL, -- En netbeans le haremos un hash a la contrasenia
-    activo BOOLEAN DEFAULT TRUE,
-    fecha_creacion DATETIME DEFAULT CURRENT_TIMESTAMP
-);
-
--- Tabla: Roles
-CREATE TABLE roles (
-    rol_id INT AUTO_INCREMENT PRIMARY KEY,
-    nombre_rol VARCHAR(50) UNIQUE NOT NULL
-);
-
--- Tabla puente: Usuarios-Roles
-CREATE TABLE usuarios_roles (
-    usuario_id INT,
-    rol_id INT,
-    PRIMARY KEY (usuario_id, rol_id),
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id),
-    FOREIGN KEY (rol_id) REFERENCES roles(rol_id)
-);
-
--- Tabla: Log de accesos/acciones (opcional)
-CREATE TABLE login_accesos (
-    login_id INT AUTO_INCREMENT PRIMARY KEY,
-    usuario_id INT,
-    accion VARCHAR(255),
-    fecha DATETIME DEFAULT CURRENT_TIMESTAMP,
-    FOREIGN KEY (usuario_id) REFERENCES usuarios(usuario_id)
-);
-
-
--- Insertar roles
 INSERT INTO roles (nombre_rol) VALUES 
-('Administrador'), 
-('Cajero'), 
-('Gerente');
+('Taquillero'), 
+('Supervisor'), 
+('Asistente');
 
--- Insertar usuarios (hash con SHA2)
-INSERT INTO usuarios (NombreUsuario, Contrasenia) 
-VALUES 
-('admin', SHA2('admin123', 256)), 
-('cajero1', SHA2('cajero123', 256));
 
--- Asignar roles
-INSERT INTO usuarios_roles (usuario_id, rol_id) VALUES 
-(1, 1), -- admin -> Administrador
-(2, 2); -- cajero1 -> Cajero
-select *from empleados;
+-- Insercion de empleados
 
-ALTER TABLE usuarios ADD COLUMN cambio_contrasenia BOOLEAN DEFAULT FALSE;
+INSERT INTO empleados (nombre, cargo, activo) VALUES
+('Bairon Pineda', 'Administrador', 1),
+('Juan Carlos', 'Cajero', 1),
+('Maria Gonzales', 'Supervisor', 1),
+('Carlos Aguilar', 'Taquillero', 1),
+('Julio Perez', 'Asistente', 1),
+('Dalia Fernandez', 'Administrador', 1);
 
-ALTER TABLE usuarios ADD COLUMN empleado_id INT;
-ALTER TABLE usuarios ADD FOREIGN KEY (empleado_id) REFERENCES empleados(empleado_id);
-select *from usuarios;
-
-DESCRIBE empleados;
